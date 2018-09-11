@@ -12,6 +12,7 @@ export class AppComponent implements OnInit, OnDestroy {
   navOpened: boolean;
   @ViewChild('snav') snav;
   menu;
+  title;
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');

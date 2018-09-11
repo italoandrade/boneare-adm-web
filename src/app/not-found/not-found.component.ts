@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {AppComponent} from '../app.component';
 
 @Component({
   selector: 'app-not-found',
@@ -6,9 +7,10 @@ import {Component, OnInit} from '@angular/core';
 })
 
 export class NotFoundComponent implements OnInit {
-  constructor() {
+  constructor(private appComponent: AppComponent) {
   }
 
   ngOnInit() {
+    this.appComponent.title = 'Página não encontrada';
   }
 }

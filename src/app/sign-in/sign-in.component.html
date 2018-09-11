@@ -1,0 +1,39 @@
+<form #formSignIn="ngForm" (submit)="onSubmit(formSignIn)">
+    <mat-card>
+      <mat-progress-bar mode="query" *ngIf="loading"></mat-progress-bar>
+      <mat-card-title>Boneare Café</mat-card-title>
+      <mat-card-subtitle>Preenche com seu e-mail e senha para entrar</mat-card-subtitle>
+      <mat-card-content class="container">
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>E-mail</mat-label>
+            <input matInput #emailField="ngModel" name="email" [(ngModel)]="user.email" type="email" required
+                   [email]="true" [disabled]="loading">
+            <mat-error *ngIf="emailField.hasError('email') && !emailField.hasError('required')">
+              Preencha com um e-mail <strong>válido</strong>
+            </mat-error>
+            <mat-error *ngIf="emailField.hasError('required')">
+              Preencha com seu e-mail
+            </mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Senha</mat-label>
+            <input matInput #passwordField="ngModel" name="password" [(ngModel)]="user.password"
+                   [type]="showPassword ? 'text' : 'password'"
+                   required [disabled]="loading">
+            <mat-icon matSuffix (click)="showPassword = !showPassword">{{showPassword ? 'visibility_off' :
+              'visibility'}}
+            </mat-icon>
+            <mat-error *ngIf="passwordField.hasError('required')">
+              Preencha com sua senha
+            </mat-error>
+          </mat-form-field>
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="end">
+        <button mat-flat-button color="primary" [disabled]="loading">ENTRAR</button>
+      </mat-card-actions>
+    </mat-card>
+</form>
