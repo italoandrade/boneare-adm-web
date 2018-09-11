@@ -5,11 +5,14 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialComponentsModule} from './material-components.module';
 import {RouterModule} from '@angular/router';
-import {HomeComponent} from './home/home.component';
+import {HomeComponent} from './views/home/home.component';
 import {AppRoutingModule} from './app-routing.module';
-import {NotFoundComponent} from './not-found/not-found.component';
-import {SignInComponent} from './sign-in/sign-in.component';
+import {NotFoundComponent} from './views/not-found/not-found.component';
+import {SignInComponent} from './views/sign-in/sign-in.component';
 import {FormsModule} from '@angular/forms';
+import {ApiService} from './utils/api.service';
+import {HttpClientModule} from '@angular/common/http';
+import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
 
 @NgModule({
   declarations: [
@@ -17,7 +20,8 @@ import {FormsModule} from '@angular/forms';
 
     HomeComponent,
     NotFoundComponent,
-    SignInComponent
+    SignInComponent,
+    ApiUnavailableDialog
   ],
   imports: [
     BrowserModule,
@@ -25,10 +29,12 @@ import {FormsModule} from '@angular/forms';
     RouterModule,
     FormsModule,
     MaterialComponentsModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [ApiService],
+  bootstrap: [AppComponent],
+  entryComponents: [ApiUnavailableDialog]
 })
 export class AppModule {
 }

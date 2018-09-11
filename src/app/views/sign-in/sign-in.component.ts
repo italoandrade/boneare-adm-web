@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {AppComponent} from '../app.component';
+import {AppComponent} from '../../app.component';
 import {User} from './user.model';
+import {ApiService} from '../../utils/api.service';
 
 @Component({
   selector: 'app-sign-in',
@@ -13,7 +14,7 @@ export class SignInComponent implements OnInit {
   loading = false;
   user = new User();
 
-  constructor(private appComponent: AppComponent) {
+  constructor(private appComponent: AppComponent, private apiService: ApiService) {
   }
 
   ngOnInit() {
@@ -21,11 +22,16 @@ export class SignInComponent implements OnInit {
   }
 
   onSubmit(form) {
-    console.log(form);
-    if (form.valid) {
-      console.log('valid');
-    }
-    console.log(this.user);
     this.loading = true;
+    if (form.invalid) {
+      return this.loading = false;
+    }
+
+    this.apiService
+      .prep('ping', 'ping')
+      // .call()
+      // .then((e) => {
+      //   console.log(e);
+      // });
   }
 }

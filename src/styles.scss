@@ -23,3 +23,7 @@ $candy-app-theme: mat-light-theme($candy-app-primary, $candy-app-accent);
 input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px rgb(245, 245, 245) inset;
 }
+
+body {
+  font-family: Roboto,"Helvetica Neue Light","Helvetica Neue",Helvetica,Arial,"Lucida Grande",sans-serif;
+}

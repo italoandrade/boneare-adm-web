@@ -1,5 +1,7 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
+import {ApiService} from './utils/api.service';
+import {environment} from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,7 @@ export class AppComponent implements OnInit, OnDestroy {
   menu;
   title;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher) {
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -22,6 +24,9 @@ export class AppComponent implements OnInit, OnDestroy {
       {title: 'Início', icon: 'home', url: '/'},
       {title: 'Iniciar sessão', icon: 'person', url: '/sign-in'},
     ];
+    this.apiService.init({
+      apiUrl: environment.apiHost + environment.apiRoutes
+    });
   }
 
   ngOnInit() {
