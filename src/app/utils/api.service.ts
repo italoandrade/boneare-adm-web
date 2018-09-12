@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ApiUnavailableDialog} from '../dialogs/api-unavailable.dialog';
 import {MatDialog} from '@angular/material';
 
@@ -15,11 +15,16 @@ export class ApiService {
   init(config) {
     this.config = config;
 
+    let then;
+
     this.http.get(config.apiUrl).subscribe(
       data => {
         API = data;
+        if (then) {
+          then();
+        }
       },
-      (e) => {
+      () => {
         const dialogRef = this.dialog.open(ApiUnavailableDialog, {
           width: '300px'
         });
@@ -29,6 +34,13 @@ export class ApiService {
         });
       }
     );
+
+
+    return {
+      then: fn => {
+        then = fn;
+      }
+    };
   }
 
   prep(functionality, method) {
@@ -36,7 +48,16 @@ export class ApiService {
 
     return {
       call: data => {
-        return this.http[apiMethod.type](this.config.apiHost + apiMethod.path, data);
+        data = data || {};
+
+        let headers = new HttpHeaders();
+
+        const token = localStorage.getItem('RNB');
+        if (token) {
+          headers = headers.set('Authentication', token);
+        }
+
+        return this.http[apiMethod.type](this.config.apiHost + apiMethod.path, data, {headers});
       }
     };
   }
