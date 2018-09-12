@@ -29,6 +29,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.apiService.init({
       apiUrl: environment.apiHost + environment.apiRoutes,
       apiHost: environment.apiHost,
+    }).then(() => {
+      this.userService.checkToken();
     });
     this.userService.userChange.subscribe(user => this.user = user);
   }
