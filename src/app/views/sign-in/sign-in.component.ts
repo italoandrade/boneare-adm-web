@@ -19,7 +19,7 @@ export class SignInComponent implements OnInit {
   constructor(private appComponent: AppComponent, private apiService: ApiService, private userService: UserService,
               private snackBar: MatSnackBar, private router: Router) {
     this.user = {
-      email: 'test@test.comd',
+      email: 'test@test.com',
       password: 'test'
     };
     // REMOVE
@@ -40,26 +40,30 @@ export class SignInComponent implements OnInit {
       .call(this.user)
       .subscribe(
         res => {
-          this.router.navigate(['/']);
           this.userService.set(res.user);
           this.userService.setToken(res.token);
+          this.router.navigate(['/']).then();
         },
         err => {
           this.loading = false;
           setTimeout(() => {
-            switch (err.error.code) {
-              case 1:
-                this.snackBar.open(err.error.message, null, {
-                  duration: 3000
-                });
-                form.controls['email'].setErrors({notFound: true});
-                break;
-              case 2:
-                this.snackBar.open(err.error.message, null, {
-                  duration: 3000
-                });
-                form.controls['password'].setErrors({wrong: true});
-                break;
+            if (err.error) {
+              switch (err.error.code) {
+                case 1:
+                  this.snackBar.open(err.error.message, null, {
+                    duration: 3000
+                  });
+                  form.controls['email'].setErrors({notFound: true});
+                  break;
+                case 2:
+                  this.snackBar.open(err.error.message, null, {
+                    duration: 3000
+                  });
+                  form.controls['password'].setErrors({wrong: true});
+                  break;
+              }
+            } else {
+              console.error(err);
             }
           });
           console.log(form.controls);
