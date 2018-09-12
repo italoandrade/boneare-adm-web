@@ -2,6 +2,7 @@ import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angul
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ApiService} from './utils/api.service';
 import {environment} from '../environments/environment';
+import {UserService} from './utils/user.service';
 
 @Component({
   selector: 'app-root',
@@ -13,10 +14,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _mobileQueryListener: () => void;
   navOpened: boolean;
   @ViewChild('snav') snav;
-  menu;
-  title;
+  menu: any;
+  title: string;
+  user: any;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService) {
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService, private userService: UserService) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -25,8 +27,10 @@ export class AppComponent implements OnInit, OnDestroy {
       {title: 'Iniciar sessão', icon: 'person', url: '/sign-in'},
     ];
     this.apiService.init({
-      apiUrl: environment.apiHost + environment.apiRoutes
+      apiUrl: environment.apiHost + environment.apiRoutes,
+      apiHost: environment.apiHost,
     });
+    this.userService.userChange.subscribe(user => this.user = user);
   }
 
   ngOnInit() {

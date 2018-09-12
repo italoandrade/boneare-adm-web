@@ -13,6 +13,8 @@ import {FormsModule} from '@angular/forms';
 import {ApiService} from './utils/api.service';
 import {HttpClientModule} from '@angular/common/http';
 import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
+import {UserService} from './utils/user.service';
+import {AuthGuard} from './utils/auth.guard';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [ApiService],
+  providers: [ApiService, UserService, AuthGuard],
   bootstrap: [AppComponent],
   entryComponents: [ApiUnavailableDialog]
 })

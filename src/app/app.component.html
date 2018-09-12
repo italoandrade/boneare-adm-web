@@ -11,7 +11,7 @@
     <span style="flex: 1"></span>
 
     <span>
-      <a mat-icon-button routerLink="/sign-in">
+      <a mat-icon-button routerLink="/sign-in" *ngIf="!user">
         <mat-icon>person</mat-icon>
       </a>
     </span>
@@ -24,10 +24,14 @@
                  [opened]="navOpened"
                  class="mat-elevation-z4">
       <mat-nav-list class="nav-list">
-        <a mat-list-item *ngFor="let item of menu; let i = index" [routerLink]="[item.url]" routerLinkActive="active"
-           [routerLinkActiveOptions]="{exact: i === 0}">
-          <mat-icon matListIcon>{{item.icon}}</mat-icon>
-          <p matLine>{{item.title}}</p>
+        <a mat-list-item routerLink="/" routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}">
+          <mat-icon matListIcon>home</mat-icon>
+          <p matLine>Início</p>
+        </a>
+        <a mat-list-item *ngIf="!user" routerLink="/sign-in" routerLinkActive="active">
+          <mat-icon matListIcon>person</mat-icon>
+          <p matLine>Iniciar sessão</p>
         </a>
       </mat-nav-list>
     </mat-sidenav>
