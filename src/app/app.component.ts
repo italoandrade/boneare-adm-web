@@ -4,6 +4,7 @@ import {ApiService} from './utils/api.service';
 import {environment} from '../environments/environment';
 import {UserService} from './utils/user.service';
 import {ColorProvider} from './utils/color.provider';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
   loading = true;
 
   constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService, private userService: UserService,
-              public colorProvider: ColorProvider) {
+              public colorProvider: ColorProvider, private router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -65,5 +66,6 @@ export class AppComponent implements OnInit, OnDestroy {
   signOut() {
     this.userService.set(null);
     this.userService.setToken(null);
+    this.router.navigate(['/']);
   }
 }
