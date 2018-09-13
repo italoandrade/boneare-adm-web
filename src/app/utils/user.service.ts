@@ -39,6 +39,7 @@ export class UserService {
             this.setToken(res.token);
           },
           () => {
+            this.set(null);
             localStorage.removeItem('RNB');
             this.snackBar.open('Sua sessão expirou', null, {
               duration: 3000
@@ -50,6 +51,8 @@ export class UserService {
             }
           }
         );
+    } else {
+      this.set(null);
     }
 
     return {
