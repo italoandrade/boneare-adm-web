@@ -59,3 +59,46 @@ a.active {
   width: 256px;
   padding-right: 24px;
 }
+
+.toolbar-loading {
+  width: 34px !important;
+  height: 34px !important;
+
+  ::ng-deep {
+    svg {
+      width: 34px !important;
+      height: 34px !important;
+    }
+
+    circle {
+      stroke: white;
+    }
+  }
+}
+
+.page-loading {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  width: 100%;
+  left: 0;
+  top: 0;
+  height: 100%;
+  align-items: center;
+
+  mat-spinner {
+    width: 64px !important;
+    height: 64px !important;
+
+    ::ng-deep {
+      svg {
+        width: 64px !important;
+        height: 64px !important;
+      }
+    }
+  }
+}
+
+.user-button {
+  font-size: 18px;
+}

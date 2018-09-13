@@ -3,6 +3,7 @@ import {MediaMatcher} from '@angular/cdk/layout';
 import {ApiService} from './utils/api.service';
 import {environment} from '../environments/environment';
 import {UserService} from './utils/user.service';
+import {ColorProvider} from './utils/color.provider';
 
 @Component({
   selector: 'app-root',
@@ -17,8 +18,11 @@ export class AppComponent implements OnInit, OnDestroy {
   menu: any;
   title: string;
   user: any;
+  readyToGo = false;
+  loading = true;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService, private userService: UserService) {
+  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService, private userService: UserService,
+              public colorProvider: ColorProvider) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -29,9 +33,21 @@ export class AppComponent implements OnInit, OnDestroy {
     this.apiService.init({
       apiUrl: environment.apiHost + environment.apiRoutes,
       apiHost: environment.apiHost,
-    }).then(() => {
-      this.userService.checkToken();
-    });
+    }).subscribe(
+      () => {
+        this.userService.checkToken().then(() => {
+          this.readyToGo = true;
+          this.loading = false;
+        });
+      },
+      () => {
+        this.readyToGo = false;
+        this.loading = false;
+      },
+      () => {
+        this.loading = true;
+      }
+    );
     this.userService.userChange.subscribe(user => this.user = user);
   }
 
@@ -44,5 +60,10 @@ export class AppComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
+
+  signOut() {
+    this.userService.set(null);
+    this.userService.setToken(null);
   }
 }
