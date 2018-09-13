@@ -4,8 +4,8 @@ import {
   MatCardModule, MatDialogModule,
   MatFormFieldModule,
   MatIconModule, MatInputModule,
-  MatListModule, MatMenuModule, MatProgressBarModule, MatProgressSpinnerModule,
-  MatSidenavModule, MatSnackBarModule,
+  MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
+  MatSidenavModule, MatSnackBarModule, MatTableModule,
   MatToolbarModule
 } from '@angular/material';
 
@@ -22,7 +22,9 @@ const components = [
   MatDialogModule,
   MatSnackBarModule,
   MatProgressSpinnerModule,
-  MatMenuModule
+  MatMenuModule,
+  MatTableModule,
+  MatPaginatorModule
 ];
 
 @NgModule({
