@@ -16,6 +16,7 @@ import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
 import {UserService} from './utils/user.service';
 import {AuthGuard, ReverseAuthGuard} from './utils/auth.guard';
 import {ColorProvider} from './utils/color.provider';
+import {ClientModule} from './views/client/client.module';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,9 @@ import {ColorProvider} from './utils/color.provider';
     FormsModule,
     MaterialComponentsModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+
+    ClientModule
   ],
   providers: [ApiService, UserService, AuthGuard, ReverseAuthGuard, ColorProvider],
   bootstrap: [AppComponent],

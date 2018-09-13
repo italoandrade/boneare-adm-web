@@ -28,16 +28,18 @@ h1.app-name {
   flex: 1;
 }
 
+/*
 .is-mobile .sidenav-container {
-  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-     `<body>` to be our scrolling element for mobile layouts. */
+  !* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. *!
   flex: 1 0 auto;
 }
+*/
 
 
-.sidenav-container mat-sidenav-content {
+/*.sidenav-container mat-sidenav-content {
   padding: 16px;
-}
+}*/
 
 a.active {
   color: map_get($mat-brown, 500);
