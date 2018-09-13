@@ -19,3 +19,20 @@ export class AuthGuard implements CanActivate {
     return true;
   }
 }
+
+@Injectable()
+export class ReverseAuthGuard implements CanActivate {
+  constructor(private userService: UserService, private router: Router, private snackBar: MatSnackBar) {
+  }
+
+  canActivate(): boolean {
+    if (this.userService.user) {
+      this.router.navigate(['/']);
+      this.snackBar.open('Você já está com a sessão iniciada', null, {
+        duration: 3000
+      });
+      return false;
+    }
+    return true;
+  }
+}

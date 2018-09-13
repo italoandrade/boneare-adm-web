@@ -27,6 +27,15 @@ export class SignInComponent implements OnInit {
 
   ngOnInit() {
     this.appComponent.title = 'Iniciar sessão';
+
+    if (this.userService.user) {
+      this.router.navigate(['/']);
+      setTimeout(() => {
+        this.snackBar.open('Você já está com a sessão iniciada', null, {
+          duration: 3000
+        });
+      });
+    }
   }
 
   onSubmit(form) {
@@ -42,7 +51,7 @@ export class SignInComponent implements OnInit {
         res => {
           this.userService.set(res.user);
           this.userService.setToken(res.token);
-          this.router.navigate(['/']).then();
+          this.router.navigate(['/']);
         },
         err => {
           this.loading = false;
@@ -66,7 +75,6 @@ export class SignInComponent implements OnInit {
               console.error(err);
             }
           });
-          console.log(form.controls);
         }
       );
   }
