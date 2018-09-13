@@ -95,7 +95,17 @@ export class ApiService {
 
         return {
           subscribe: (pNext, pError?, pFinally?) => {
-            return http.subscribe(pNext, pError).add(pFinally);
+            return http.subscribe(pNext, (e) => {
+              if (pError) {
+                pError(e);
+              }
+
+              if (e.status === 0) {
+                this.dialog.open(ApiUnavailableDialog, {
+                  width: '300px'
+                });
+              }
+            }).add(pFinally);
           }
         };
       }
