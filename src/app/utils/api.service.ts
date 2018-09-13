@@ -15,30 +15,42 @@ export class ApiService {
   init(config) {
     this.config = config;
 
-    let then;
+    let fnSuccess;
+    let fnError;
+    let fnRetry;
 
     this.http.get(config.apiUrl).subscribe(
       data => {
         API = data;
-        if (then) {
-          then();
+        if (fnSuccess) {
+          fnSuccess();
         }
       },
       () => {
+        if (fnError) {
+          fnError();
+        }
+
         const dialogRef = this.dialog.open(ApiUnavailableDialog, {
           width: '300px'
         });
 
         dialogRef.afterClosed().subscribe(() => {
-          this.init(config);
+          if (fnRetry) {
+            fnRetry();
+          }
+
+          this.init(config).subscribe(fnSuccess, fnError, fnRetry);
         });
       }
     );
 
 
     return {
-      then: fn => {
-        then = fn;
+      subscribe: (success, error?, retry?) => {
+        fnSuccess = success;
+        fnError = error;
+        fnRetry = retry;
       }
     };
   }
@@ -47,18 +59,70 @@ export class ApiService {
     const apiMethod = API[functionality][method];
 
     return {
-      call: data => {
-        data = data || {};
+      call: (data: {}, setHeaders?: {}) => {
+        let url = this.config.apiHost + apiMethod.path;
 
         let headers = new HttpHeaders();
-
-        const token = localStorage.getItem('RNB');
-        if (token) {
-          headers = headers.set('Authentication', token);
+        if (!apiMethod.public) {
+          headers = headers.set('Authentication', localStorage.getItem('RNB'));
+        }
+        if (setHeaders) {
+          Object.keys(setHeaders).forEach((key) => {
+            headers = headers.set(key, setHeaders[key]);
+          });
         }
 
-        return this.http[apiMethod.type](this.config.apiHost + apiMethod.path, data, {headers});
+        let secondParam = data;
+        let thirdParam = {
+          headers
+        };
+
+        if (data) {
+          const urlParams = jsonToParams(url, data);
+          url = urlParams.url;
+          data = urlParams.data;
+        }
+
+        if (method.method === 'get' || method.method === 'delete') {
+          if (data) {
+            url = url + jsonToQueryString(data);
+          }
+          secondParam = thirdParam;
+          thirdParam = undefined;
+        }
+
+        const http = this.http[apiMethod.type](url, secondParam, thirdParam);
+
+        return {
+          subscribe: (pNext, pError?, pFinally?) => {
+            return http.subscribe(pNext, pError).add(pFinally);
+          }
+        };
       }
     };
   }
+
+}
+
+function jsonToQueryString(json) {
+  const params = Object.keys(json).map(function (key) {
+    return encodeURIComponent(key) + '=' +
+      encodeURIComponent(json[key]);
+  });
+  return (params.length ? '?' : '') + params.join('&');
+}
+
+function jsonToParams(url, data) {
+  const dataClone = Object.assign({}, data);
+  Object.keys(dataClone).forEach((key) => {
+    if (url.includes(':' + key)) {
+      url = url.replace(':' + key, dataClone[key]);
+      delete dataClone[key];
+    }
+  });
+
+  return {
+    url: url,
+    data: dataClone
+  };
 }
