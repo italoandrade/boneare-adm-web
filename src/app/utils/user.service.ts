@@ -18,15 +18,21 @@ export class UserService {
 
   setToken(token) {
     this.token = token;
-    localStorage.setItem('RNB', token);
+    if (token) {
+      localStorage.setItem('RNB', token);
+    } else {
+      localStorage.removeItem('RNB');
+    }
   }
 
   checkToken() {
+    let then;
+
     this.token = localStorage.getItem('RNB');
     if (this.token) {
       this.apiService
         .prep('user', 'signIn')
-        .call({token: this.token})
+        .call(null, {'Authentication': this.token})
         .subscribe(
           res => {
             this.set(res.user);
@@ -37,9 +43,23 @@ export class UserService {
             this.snackBar.open('Sua sessão expirou', null, {
               duration: 3000
             });
+          },
+          () => {
+            if (then) {
+              then();
+            }
           }
         );
     }
+
+    return {
+      then: fn => {
+        if (!this.token) {
+          fn();
+        }
+        then = fn;
+      }
+    };
   }
 }
 
