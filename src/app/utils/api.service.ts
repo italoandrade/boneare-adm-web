@@ -59,7 +59,7 @@ export class ApiService {
     const apiMethod = API[functionality][method];
 
     return {
-      call: (data: {}, setHeaders?: {}) => {
+      call: (data?: {}, setHeaders?: {}, returnHttp?) => {
         let url = this.config.apiHost + apiMethod.path;
 
         let headers = new HttpHeaders();
@@ -83,7 +83,7 @@ export class ApiService {
           data = urlParams.data;
         }
 
-        if (method.method === 'get' || method.method === 'delete') {
+        if (apiMethod.type === 'get' || apiMethod.type === 'delete') {
           if (data) {
             url = url + jsonToQueryString(data);
           }
@@ -92,6 +92,9 @@ export class ApiService {
         }
 
         const http = this.http[apiMethod.type](url, secondParam, thirdParam);
+        if (returnHttp) {
+          return http;
+        }
 
         return {
           subscribe: (pNext, pError?, pFinally?) => {
@@ -116,9 +119,11 @@ export class ApiService {
 
 function jsonToQueryString(json) {
   const params = Object.keys(json).map(function (key) {
-    return encodeURIComponent(key) + '=' +
-      encodeURIComponent(json[key]);
-  });
+    const value = json[key];
+    if (typeof value !== 'undefined') {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(value);
+    }
+  }).filter(item => item);
   return (params.length ? '?' : '') + params.join('&');
 }
 
