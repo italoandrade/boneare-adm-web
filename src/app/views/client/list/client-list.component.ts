@@ -1,6 +1,10 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../../app.component';
-import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+import {MatPaginator, MatSort} from '@angular/material';
+import {ClientListDataSource} from './client-list.data-source';
+import {ClientListService} from './client-list.service';
+import {debounceTime, distinctUntilChanged, tap} from 'rxjs/operators';
+import {fromEvent, merge} from 'rxjs';
 
 @Component({
   selector: 'app-client-list',
@@ -8,49 +12,64 @@ import {MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
   styleUrls: ['client-list.component.scss']
 })
 
-export class ClientListComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'name', 'weight', 'symbol'];
-  dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
+export class ClientListComponent implements OnInit, AfterViewInit {
+  displayedColumns = ['id', 'name'];
+  dataSource: ClientListDataSource;
+  lessonsCount = 0;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild('input') input: ElementRef;
 
-  constructor(private appComponent: AppComponent) {
+  constructor(private appComponent: AppComponent, private clientListService: ClientListService) {
   }
 
   ngOnInit() {
     this.appComponent.title = 'Clientes';
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
+    this.dataSource = new ClientListDataSource(this.clientListService);
+    this.dataSource.loadLessons(1, undefined, undefined, undefined, 0, 10);
+    this.dataSource.lessonsSubject.subscribe((test) => {
+      if (test.length) {
+         this.lessonsCount = test[0].lineCount;
+      }
+    });
+  }
+
+  ngAfterViewInit() {
+    // server-side search
+    fromEvent(this.input.nativeElement, 'keyup')
+      .pipe(
+        debounceTime(150),
+        distinctUntilChanged(),
+        tap(() => {
+          this.paginator.pageIndex = 0;
+          this.loadLessonsPage();
+        })
+      )
+      .subscribe();
+
+    // reset the paginator after sorting
+    this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+
+    // on sort or paginate events, load a new page
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        tap(() => this.loadLessonsPage())
+      )
+      .subscribe();
+  }
+
+  loadLessonsPage() {
+    this.dataSource.loadLessons(
+      1,
+      this.input.nativeElement.value ? this.input.nativeElement.value : undefined,
+      this.sort.direction ? this.sort.active : undefined,
+      this.sort.direction ? this.sort.direction : undefined,
+      this.paginator.pageIndex,
+      this.paginator.pageSize);
+  }
+
+  onRowClicked(row) {
+    console.log('Row clicked: ', row);
   }
 }
-
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
-  {position: 11, name: 'Sodium', weight: 22.9897, symbol: 'Na'},
-  {position: 12, name: 'Magnesium', weight: 24.305, symbol: 'Mg'},
-  {position: 13, name: 'Aluminum', weight: 26.9815, symbol: 'Al'},
-  {position: 14, name: 'Silicon', weight: 28.0855, symbol: 'Si'},
-  {position: 15, name: 'Phosphorus', weight: 30.9738, symbol: 'P'},
-  {position: 16, name: 'Sulfur', weight: 32.065, symbol: 'S'},
-  {position: 17, name: 'Chlorine', weight: 35.453, symbol: 'Cl'},
-  {position: 18, name: 'Argon', weight: 39.948, symbol: 'Ar'},
-  {position: 19, name: 'Potassium', weight: 39.0983, symbol: 'K'},
-  {position: 20, name: 'Calcium', weight: 40.078, symbol: 'Ca'},
-];

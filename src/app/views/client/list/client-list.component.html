@@ -1,33 +1,46 @@
-<div class="mat-elevation-z8">
-  <table mat-table [dataSource]="dataSource">
+<div class="lessons-table mat-elevation-z8">
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="position">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> No. </th>
-      <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+  <div class="search">
+    <mat-form-field appearance="outline">
+      <mat-label>Pesquisa</mat-label>
+      <input matInput placeholder="Digite nome do cliente ou CPF" #input>
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 38px">#</th>
+      <td mat-cell *matCellDef="let lesson">{{lesson.id}}</td>
     </ng-container>
 
-    <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td mat-cell class="description-cell"
+                *matCellDef="let lesson">{{lesson.name}}
+      </td>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="weight">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Weight </th>
-      <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
-    </ng-container>
-
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="symbol">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header> Symbol </th>
-      <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"
+             (click)="onRowClicked(row)">
+    </tr>
+
   </table>
 
-  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [length]="lessonsCount" [pageSize]="10"
+                 [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
+</div>
+
+<div class="fab-container-space"></div>
+<div class="fab-container">
+  <a mat-fab color="accent" routerLink="/client/add">
+    <i class="material-icons">add</i>
+  </a>
 </div>
