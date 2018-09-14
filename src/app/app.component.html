@@ -50,7 +50,8 @@
           <p matLine>Iniciar sessão</p>
         </a>
         <div *ngIf="!loading && readyToGo && user">
-          <a mat-list-item routerLink="/clients" routerLinkActive="active" (click)="mobileQuery.matches && snav.close()">
+          <a mat-list-item routerLink="/clients" routerLinkActive="active"
+             (click)="mobileQuery.matches && snav.close()">
             <mat-icon matListIcon>group</mat-icon>
             <p matLine>Clientes</p>
           </a>
