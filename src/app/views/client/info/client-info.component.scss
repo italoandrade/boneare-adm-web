@@ -1,0 +1,8 @@
+:host {
+  padding: 16px;
+  display: block;
+}
+
+:host-context(.is-mobile) {
+  padding: initial;
+}

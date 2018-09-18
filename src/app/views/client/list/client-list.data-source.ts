@@ -6,32 +6,32 @@ import {catchError, finalize} from 'rxjs/operators';
 
 export class ClientListDataSource implements DataSource<any> {
 
-  public lessonsSubject = new BehaviorSubject<any>([]);
+  public subject = new BehaviorSubject<any>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private coursesService: ClientListService) {
+  constructor(private clientListService: ClientListService) {
   }
 
   connect(collectionViewer: CollectionViewer) {
-    return this.lessonsSubject.asObservable();
+    return this.subject.asObservable();
   }
 
   disconnect(collectionViewer: CollectionViewer): void {
-    this.lessonsSubject.complete();
+    this.subject.complete();
     this.loadingSubject.complete();
   }
 
-  loadLessons(courseId, filter, sortColumn, sortDirection, pageIndex = 0, pageSize = 10) {
+  load(filter, sortColumn, sortDirection, pageIndex, pageSize) {
     this.loadingSubject.next(true);
 
-    this.coursesService
-      .findLessons(courseId, filter, sortColumn, sortDirection, pageIndex, pageSize)
+    this.clientListService
+      .listAll(filter, sortColumn, sortDirection, pageIndex, pageSize)
       .pipe(
-        catchError(() => of([])),
+        catchError(() => of(null)),
         finalize(() => this.loadingSubject.next(false))
       )
-      .subscribe(lessons => this.lessonsSubject.next(lessons));
+      .subscribe(lessons => this.subject.next(lessons));
   }
 }

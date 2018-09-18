@@ -3,19 +3,19 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './views/home/home.component';
 import {NotFoundComponent} from './views/not-found/not-found.component';
 import {SignInComponent} from './views/sign-in/sign-in.component';
-import {AuthGuard, ReverseAuthGuard} from './utils/auth.guard';
-import {ClientListComponent} from './views/client/list/client-list.component';
+import {ReverseAuthGuard} from './utils/auth.guard';
+import {CLIENT_ROUTES} from './views/client/client.routes';
 
-const appRoutes: Routes = [
+const APP_ROUTES: Routes = [
   {path: '', component: HomeComponent},
   {path: 'sign-in', component: SignInComponent, canActivate: [ReverseAuthGuard]},
-  {path: 'clients', component: ClientListComponent, canActivate: [AuthGuard]},
+  ...CLIENT_ROUTES,
   {path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(appRoutes)
+    RouterModule.forRoot(APP_ROUTES)
   ]
 })
 export class AppRoutingModule {

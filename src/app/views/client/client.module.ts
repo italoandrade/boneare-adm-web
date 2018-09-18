@@ -6,9 +6,13 @@ import {MatPaginatorIntl} from '@angular/material';
 import {MatPaginatorIntlBra} from '../../utils/matPaginatorIntlBra';
 import {BrowserModule} from '@angular/platform-browser';
 import {ClientListService} from './list/client-list.service';
+import {ClientInfoComponent} from './info/client-info.component';
 
 @NgModule({
-  declarations: [ClientListComponent],
+  declarations: [
+    ClientListComponent,
+    ClientInfoComponent
+  ],
   imports: [
     BrowserModule,
     RouterModule,

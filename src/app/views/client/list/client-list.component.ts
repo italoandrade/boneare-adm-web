@@ -15,7 +15,7 @@ import {fromEvent, merge} from 'rxjs';
 export class ClientListComponent implements OnInit, AfterViewInit {
   displayedColumns = ['id', 'name'];
   dataSource: ClientListDataSource;
-  lessonsCount = 0;
+  totalLinesCount = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -27,41 +27,39 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.appComponent.title = 'Clientes';
     this.dataSource = new ClientListDataSource(this.clientListService);
-    this.dataSource.loadLessons(1, undefined, undefined, undefined, 0, 10);
-    this.dataSource.lessonsSubject.subscribe((test) => {
-      if (test.length) {
-         this.lessonsCount = test[0].lineCount;
+    this.dataSource.load(undefined, undefined, undefined, undefined, undefined);
+    this.dataSource.subject.subscribe(items => {
+      if (items) {
+        this.totalLinesCount = items.length && (items[0].lineCount || 0);
+      } else {
+        this.totalLinesCount = null;
       }
     });
   }
 
   ngAfterViewInit() {
-    // server-side search
     fromEvent(this.input.nativeElement, 'keyup')
       .pipe(
         debounceTime(150),
         distinctUntilChanged(),
         tap(() => {
           this.paginator.pageIndex = 0;
-          this.loadLessonsPage();
+          this.loadPage();
         })
       )
       .subscribe();
 
-    // reset the paginator after sorting
     this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
 
-    // on sort or paginate events, load a new page
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
-        tap(() => this.loadLessonsPage())
+        tap(() => this.loadPage())
       )
       .subscribe();
   }
 
-  loadLessonsPage() {
-    this.dataSource.loadLessons(
-      1,
+  loadPage() {
+    this.dataSource.load(
       this.input.nativeElement.value ? this.input.nativeElement.value : undefined,
       this.sort.direction ? this.sort.active : undefined,
       this.sort.direction ? this.sort.direction : undefined,
@@ -70,6 +68,6 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   }
 
   onRowClicked(row) {
-    console.log('Row clicked: ', row);
+    sessionStorage.setItem('info', JSON.stringify(row));
   }
 }
