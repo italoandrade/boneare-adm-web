@@ -1,6 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../../app.component';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
+import {MediaMatcher} from '@angular/cdk/layout';
+import {ApiService} from '../../../utils/api.service';
+import {MatSnackBar} from '@angular/material';
 
 @Component({
   selector: 'app-client-info',
@@ -9,9 +12,16 @@ import {ActivatedRoute} from '@angular/router';
 })
 
 export class ClientInfoComponent implements OnInit {
-  info;
+  mobileQuery: MediaQueryList;
+  private readonly _mobileQueryListener: () => void;
+  info: any = {};
+  loading: boolean;
 
-  constructor(private appComponent: AppComponent, private route: ActivatedRoute) {
+  constructor(private appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
+              private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
@@ -22,10 +32,76 @@ export class ClientInfoComponent implements OnInit {
     } catch (e) {
     }
     const id = this.route.snapshot.params['id'];
-    if (+id === infoFromTable.id) {
+    if (infoFromTable && +id === infoFromTable.id) {
       this.info = infoFromTable;
     }
-    console.log(id);
-    console.log(infoFromTable);
+
+    if (id) {
+      this.apiService
+        .prep('client', 'findById')
+        .call({id})
+        .subscribe(
+          res => {
+            this.info = res;
+          },
+          err => {
+            this.router.navigate(['/clients']);
+            if (err.status === 404) {
+              this.snackBar.open(err.error.message, null, {
+                duration: 3000
+              });
+            }
+            this.loading = false;
+          }
+        );
+    }
+  }
+
+  onSubmit(form) {
+    Object.keys(form.controls).forEach(i => {
+      const input = form.controls[i];
+      input.markAsTouched();
+      if (input.invalid) {
+        setTimeout(() => {
+          (document.querySelector(`form input[name="${i}"]`) as HTMLElement).focus();
+        });
+      }
+    });
+
+    this.loading = true;
+    if (form.invalid) {
+      return this.loading = false;
+    }
+
+    if (!this.info.id) {
+      this.apiService
+        .prep('client', 'add')
+        .call(this.info)
+        .subscribe(
+          res => {
+            console.log(res);
+          },
+          err => {
+            this.loading = false;
+            console.error(err);
+          }
+        );
+    } else {
+      this.apiService
+        .prep('client', 'update')
+        .call(this.info)
+        .subscribe(
+          () => {
+            this.router.navigate(['/clients']);
+            this.snackBar.open('Cliente adicionado', null, {
+              duration: 3000
+            });
+          },
+          err => {
+            this.loading = false;
+            console.error(err);
+          }
+        );
+    }
   }
 }

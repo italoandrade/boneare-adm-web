@@ -22,8 +22,8 @@ export class AppComponent implements OnInit, OnDestroy {
   readyToGo = false;
   loading = true;
 
-  constructor(changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private apiService: ApiService, private userService: UserService,
-              public colorProvider: ColorProvider, private router: Router) {
+  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private apiService: ApiService,
+              private userService: UserService, public colorProvider: ColorProvider, private router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);

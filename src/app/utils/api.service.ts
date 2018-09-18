@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {ApiUnavailableDialog} from '../dialogs/api-unavailable.dialog';
 import {MatDialog} from '@angular/material';
+import {Observable} from 'rxjs';
 
 let API = {};
 
@@ -57,6 +58,19 @@ export class ApiService {
 
   prep(functionality, method) {
     const apiMethod = API[functionality][method];
+
+    if (!API[functionality] || !API[functionality][method]) {
+      if (!API[functionality]) {
+        console.error(`Funcionalidade [${functionality}] não encontrado`);
+      }
+      if (!API[functionality][method]) {
+        console.error(`Método [${functionality}/${method}] não encontrado`);
+      }
+
+      return {
+        call: (..._) => {return new Observable()}
+      };
+    }
 
     return {
       call: (data?: {}, setHeaders?: {}, returnHttp?) => {

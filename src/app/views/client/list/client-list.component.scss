@@ -7,22 +7,8 @@ table {
 }
 
 :host {
-  padding: 16px;
   display: block;
-}
-
-:host-context(.is-mobile) {
-  padding: initial;
-}
-
-.fab-container {
-  position: fixed;
-  bottom: 15px;
-  right: 15px;
-  z-index: 100;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
+  position: relative;
 }
 
 .search {
@@ -41,6 +27,16 @@ table {
 mat-progress-bar {
   position: absolute;
   width: 100%;
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
 }
 
 .fab-container-space {

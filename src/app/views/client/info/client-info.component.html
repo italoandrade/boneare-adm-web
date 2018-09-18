@@ -1,6 +1,46 @@
-<mat-card class="mat-elevation-z8">
-  Lorem ipsum dolor sit amet, consectetur adipisicing elit. At excepturi explicabo iure odit? Aperiam, qui voluptate.
-  Accusamus aliquid animi cupiditate, dignissimos eligendi explicabo ipsa, laboriosam magnam nostrum qui rerum soluta.
-</mat-card>
+<div class="center">
+  <form #formInfo="ngForm" (submit)="onSubmit(formInfo)">
+    <mat-card class="mat-elevation-z8">
+      <mat-progress-bar mode="query" [class.show]="loading"></mat-progress-bar>
+      <mat-card-title [title]="info.name?.length > 15 ? info.name : undefined">
+        {{!info.id ? 'Novo cliente' : 'Editando cliente ' + (info.name?.length > 15 ? (info.name | slice:0:15) + '...' :
+        info.name) }}
+      </mat-card-title>
+      <mat-card-content class="container">
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Nome</mat-label>
+            <input matInput #nameField="ngModel" name="name" [(ngModel)]="info.name" type="text" required
+                   [disabled]="loading">
+            <mat-error *ngIf="nameField.hasError('required')">
+              Preencha com o nome
+            </mat-error>
+          </mat-form-field>
+        </p>
+        <p style="opacity: 0.6" *ngIf="info.createdBy">
+          Criado por {{info.createdBy}} em <span [title]="info.creationDate | date : 'full'">{{info.creationDate | date : 'medium'}}</span>
+          <span *ngIf="info.updatedBy">
+            <br>Alterado por {{info.updatedBy}} em <span [title]="info.lastUpdateDate | date : 'full'">{{info.lastUpdateDate | date : 'medium'}}</span>
+          </span>
+        </p>
+      </mat-card-content>
+      <mat-card-actions align="right" *ngIf="!mobileQuery.matches">
+        <button mat-flat-button color="success" [disabled]="loading">{{!info.id ? 'ADICIONAR' : 'SALVAR'}}</button>
+      </mat-card-actions>
+    </mat-card>
 
-<pre>{{info | json}}</pre>
+    <pre>{{info | json}}</pre>
+  </form>
+</div>
+
+<div *ngIf="mobileQuery.matches">
+  <div class="fab-container-space"></div>
+
+  <app-fnls-displacer>
+    <div class="fab-container">
+      <button mat-fab color="success" (click)="onSubmit(formInfo)" [disabled]="loading">
+        <i class="material-icons">check</i>
+      </button>
+    </div>
+  </app-fnls-displacer>
+</div>

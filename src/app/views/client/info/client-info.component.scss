@@ -1,8 +1,54 @@
 :host {
-  padding: 16px;
   display: block;
+  position: relative;
 }
 
-:host-context(.is-mobile) {
-  padding: initial;
+.center {
+  position: relative;
+  display: flex;
+  justify-content: center;
 }
+
+.container p > * {
+  width: 100%;
+}
+
+form {
+  width: 100%;
+  max-width: 600px;
+}
+
+mat-card {
+  overflow: hidden;
+}
+
+mat-progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+
+  &.show {
+    height: 5px;
+  }
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.fab-container-space {
+  height: 74px;
+}
+
+:host-context(.is-mobile) .fab-container-space {
+  height: 82px;
+}
+
+

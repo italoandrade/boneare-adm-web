@@ -10,7 +10,7 @@ export class ClientListService {
   listAll(filter, sortColumn, sortOrder, pageNumber = 0, pageSize = 10) {
     return this
       .apiService
-      .prep('client', 'listAll')
+      .prep('client', 'findAll')
       .call({
         filter,
         sortColumn,

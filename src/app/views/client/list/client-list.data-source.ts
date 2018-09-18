@@ -26,12 +26,17 @@ export class ClientListDataSource implements DataSource<any> {
   load(filter, sortColumn, sortDirection, pageIndex, pageSize) {
     this.loadingSubject.next(true);
 
-    this.clientListService
-      .listAll(filter, sortColumn, sortDirection, pageIndex, pageSize)
-      .pipe(
-        catchError(() => of(null)),
-        finalize(() => this.loadingSubject.next(false))
-      )
-      .subscribe(lessons => this.subject.next(lessons));
+    const listAll = this.clientListService.listAll(filter, sortColumn, sortDirection, pageIndex, pageSize);
+    if (listAll.pipe) {
+      listAll
+        .pipe(
+          catchError(() => of(null)),
+          finalize(() => this.loadingSubject.next(false))
+        )
+        .subscribe(lessons => this.subject.next(lessons));
+    } else {
+      this.loadingSubject.next(false);
+      this.subject.next(null);
+    }
   }
 }
