@@ -26,9 +26,9 @@
             <input matInput #passwordField="ngModel" name="password" [(ngModel)]="user.password"
                    [type]="showPassword ? 'text' : 'password'"
                    required [disabled]="loading">
-            <mat-icon matSuffix (click)="showPassword = !showPassword">
-              {{showPassword ? 'visibility_off' : 'visibility'}}
-            </mat-icon>
+            <button type="button" mat-icon-button matSuffix (click)="showPassword = !showPassword">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
             <mat-error *ngIf="passwordField.hasError('required')">
               Preencha com sua senha
             </mat-error>
