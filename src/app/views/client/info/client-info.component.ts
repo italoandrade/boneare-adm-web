@@ -12,11 +12,16 @@ import {MatSnackBar} from '@angular/material';
 })
 
 export class ClientInfoComponent implements OnInit {
-  info: any = {};
+  info: any;
   loading: boolean;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
+    this.info = {
+      address: {},
+      phones: []
+    };
+    this.info.phones.newPhone = {};
   }
 
   ngOnInit() {
@@ -28,7 +33,7 @@ export class ClientInfoComponent implements OnInit {
     }
     const id = this.route.snapshot.params['id'];
     if (infoFromTable && +id === infoFromTable.id) {
-      this.info = infoFromTable;
+      this.info = {...this.info, ...infoFromTable};
     }
 
     if (id) {
@@ -37,7 +42,7 @@ export class ClientInfoComponent implements OnInit {
         .call({id})
         .subscribe(
           res => {
-            this.info = res;
+            this.info = {...this.info, ...res};
           },
           err => {
             this.router.navigate(['/client']);
@@ -58,7 +63,18 @@ export class ClientInfoComponent implements OnInit {
       input.markAsTouched();
       if (input.invalid) {
         setTimeout(() => {
-          (document.querySelector(`form input[name="${i}"]`) as HTMLElement).focus();
+          const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
+          const expansionPanel = closest(inputElement, el => {
+            return el.classList.contains('mat-expansion-panel');
+          });
+          if (expansionPanel && !expansionPanel.classList.contains('mat-expanded')) {
+            expansionPanel.querySelector('mat-expansion-panel-header').click();
+            setTimeout(() => {
+              inputElement.focus();
+            }, 200);
+          } else {
+            inputElement.focus();
+          }
         });
       }
     });
@@ -123,4 +139,8 @@ export class ClientInfoComponent implements OnInit {
         }
       );
   }
+}
+
+function closest(el, fn) {
+  return el && (fn(el) ? el : closest(el.parentNode, fn));
 }

@@ -9,7 +9,7 @@
   justify-content: center;
 }
 
-.container p > * {
+p > * {
   width: 100%;
 }
 
@@ -52,6 +52,37 @@ mat-progress-bar {
 }
 
 mat-toolbar {
-  background-color: white;
+  background-color: transparent;
+  a + span {
+    margin-left: 16px;
+  }
+  span + button {
+    margin-left: 16px;
+  }
 }
 
+.manut {
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+mat-card.mat-elevation-z0 {
+  background-color: transparent;
+}
+
+mat-card + mat-card {
+  margin-top: 16px;
+}
+
+mat-form-field .show-on-hover:not(.nothing) {
+  display: none;
+}
+
+mat-form-field:hover .show-on-hover:not(.nothing) {
+  display: block;
+}
+
+mat-panel-title i {
+  margin-left: 16px;
+  color: #f44336;
+}
