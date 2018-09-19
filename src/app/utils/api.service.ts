@@ -59,7 +59,63 @@ export class ApiService {
   prep(functionality, method) {
     const apiMethod = API[functionality][method];
 
-    if (!API[functionality] || !API[functionality][method]) {
+    if (API[functionality] && API[functionality][method]) {
+      return {
+        call: (data?: {}, setHeaders?: {}, returnHttp?) => {
+          let url = this.config.apiHost + apiMethod.path;
+
+          let headers = new HttpHeaders();
+          if (!apiMethod.public) {
+            headers = headers.set('Authentication', localStorage.getItem('RNB'));
+          }
+          if (setHeaders) {
+            Object.keys(setHeaders).forEach((key) => {
+              headers = headers.set(key, setHeaders[key]);
+            });
+          }
+
+          let secondParam = data;
+          let thirdParam = {
+            headers
+          };
+
+          if (data) {
+            const urlParams = jsonToParams(url, data);
+            url = urlParams.url;
+            data = urlParams.data;
+          }
+
+          if (apiMethod.type === 'get' || apiMethod.type === 'delete') {
+            if (data) {
+              url = url + jsonToQueryString(data);
+            }
+            secondParam = thirdParam;
+            thirdParam = undefined;
+          }
+
+          const http = this.http[apiMethod.type](url, secondParam, thirdParam);
+          if (returnHttp) {
+            return http;
+          }
+
+          return {
+            subscribe: (pNext, pError?, pFinally?) => {
+              return http.subscribe(pNext, (e) => {
+                if (pError) {
+                  pError(e);
+                }
+
+                if (e.status === 0) {
+                  this.dialog.open(ApiUnavailableDialog, {
+                    width: '300px'
+                  });
+                }
+              }).add(pFinally);
+            }
+          };
+        }
+      };
+    } else {
       if (!API[functionality]) {
         console.error(`Funcionalidade [${functionality}] não encontrado`);
       }
@@ -68,65 +124,11 @@ export class ApiService {
       }
 
       return {
-        call: (..._) => {return new Observable()}
+        call: (..._) => {
+          return new Observable();
+        }
       };
     }
-
-    return {
-      call: (data?: {}, setHeaders?: {}, returnHttp?) => {
-        let url = this.config.apiHost + apiMethod.path;
-
-        let headers = new HttpHeaders();
-        if (!apiMethod.public) {
-          headers = headers.set('Authentication', localStorage.getItem('RNB'));
-        }
-        if (setHeaders) {
-          Object.keys(setHeaders).forEach((key) => {
-            headers = headers.set(key, setHeaders[key]);
-          });
-        }
-
-        let secondParam = data;
-        let thirdParam = {
-          headers
-        };
-
-        if (data) {
-          const urlParams = jsonToParams(url, data);
-          url = urlParams.url;
-          data = urlParams.data;
-        }
-
-        if (apiMethod.type === 'get' || apiMethod.type === 'delete') {
-          if (data) {
-            url = url + jsonToQueryString(data);
-          }
-          secondParam = thirdParam;
-          thirdParam = undefined;
-        }
-
-        const http = this.http[apiMethod.type](url, secondParam, thirdParam);
-        if (returnHttp) {
-          return http;
-        }
-
-        return {
-          subscribe: (pNext, pError?, pFinally?) => {
-            return http.subscribe(pNext, (e) => {
-              if (pError) {
-                pError(e);
-              }
-
-              if (e.status === 0) {
-                this.dialog.open(ApiUnavailableDialog, {
-                  width: '300px'
-                });
-              }
-            }).add(pFinally);
-          }
-        };
-      }
-    };
   }
 
 }
