@@ -1,11 +1,24 @@
 <div class="center">
   <form #formInfo="ngForm" (submit)="onSubmit(formInfo)">
+    <mat-toolbar class="mat-elevation-z8">
+      <!--<mat-card-title>-->
+      <span *ngIf="!info.id">Novo cliente</span>
+      <span *ngIf="info.id" [title]="info.name" class="ellipsis">
+          {{(info.name?.length > 40 ? (info.name | slice:0:40) + '...' : info.name)}}
+        </span>
+      <span style="flex: 1"></span>
+      <button mat-icon-button type="button" *ngIf="info.id" [matMenuTriggerFor]="removeMenu" [disabled]="loading">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-menu #removeMenu="matMenu">
+        <div class="mat-menu-header">Você realmente deseja excluir?</div>
+        <button mat-menu-item (click)="remove()">Sim</button>
+        <button mat-menu-item>Não</button>
+      </mat-menu>
+      <!--</mat-card-title>-->
+    </mat-toolbar>
     <mat-card class="mat-elevation-z8">
       <mat-progress-bar mode="query" [class.show]="loading"></mat-progress-bar>
-      <mat-card-title [title]="info.name?.length > 15 ? info.name : undefined">
-        {{!info.id ? 'Novo cliente' : 'Editando cliente ' + (info.name?.length > 15 ? (info.name | slice:0:15) + '...' :
-        info.name) }}
-      </mat-card-title>
       <mat-card-content class="container">
         <p>
           <mat-form-field appearance="fill">
@@ -18,29 +31,29 @@
           </mat-form-field>
         </p>
         <p style="opacity: 0.6" *ngIf="info.createdBy">
-          Criado por {{info.createdBy}} em <span [title]="info.creationDate | date : 'full'">{{info.creationDate | date : 'medium'}}</span>
+          Criado por {{info.createdBy}} em
+          <span [title]="info.creationDate | date : 'full'">{{info.creationDate | date : 'medium'}}</span>
           <span *ngIf="info.updatedBy">
-            <br>Alterado por {{info.updatedBy}} em <span [title]="info.lastUpdateDate | date : 'full'">{{info.lastUpdateDate | date : 'medium'}}</span>
+            <br>Alterado por {{info.updatedBy}} em
+            <span [title]="info.lastUpdateDate | date : 'full'">{{info.lastUpdateDate | date : 'medium'}}</span>
           </span>
         </p>
       </mat-card-content>
-      <mat-card-actions align="right" *ngIf="!mobileQuery.matches">
+      <mat-card-actions align="right" *ngIf="!appComponent.mobileQuery.matches">
         <button mat-flat-button color="success" [disabled]="loading">{{!info.id ? 'ADICIONAR' : 'SALVAR'}}</button>
       </mat-card-actions>
     </mat-card>
 
-    <pre>{{info | json}}</pre>
+    <!--<pre>{{info | json}}</pre>-->
   </form>
 </div>
 
-<div *ngIf="mobileQuery.matches">
-  <div class="fab-container-space"></div>
+<div class="fab-container-space" *ngIf="appComponent.mobileQuery.matches"></div>
 
-  <app-fnls-displacer>
-    <div class="fab-container">
-      <button mat-fab color="success" (click)="onSubmit(formInfo)" [disabled]="loading">
-        <i class="material-icons">check</i>
-      </button>
-    </div>
-  </app-fnls-displacer>
-</div>
+<app-fnls-displacer>
+  <div class="fab-container" *ngIf="appComponent.mobileQuery.matches">
+    <button mat-fab color="success" (click)="onSubmit(formInfo)" [disabled]="loading">
+      <i class="material-icons">check</i>
+    </button>
+  </div>
+</app-fnls-displacer>

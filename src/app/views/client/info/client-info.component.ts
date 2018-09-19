@@ -12,20 +12,15 @@ import {MatSnackBar} from '@angular/material';
 })
 
 export class ClientInfoComponent implements OnInit {
-  mobileQuery: MediaQueryList;
-  private readonly _mobileQueryListener: () => void;
   info: any = {};
   loading: boolean;
 
-  constructor(private appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
+  constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit() {
-    this.appComponent.title = 'Clientes';
+    this.appComponent.title = 'Cliente';
     let infoFromTable: any = sessionStorage.getItem('info');
     try {
       infoFromTable = infoFromTable && JSON.parse(infoFromTable);
@@ -45,7 +40,7 @@ export class ClientInfoComponent implements OnInit {
             this.info = res;
           },
           err => {
-            this.router.navigate(['/clients']);
+            this.router.navigate(['/client']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
@@ -79,7 +74,10 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            console.log(res);
+            this.router.navigate(['/client/', res.id]);
+            this.snackBar.open('Cliente adicionado', null, {
+              duration: 3000
+            });
           },
           err => {
             this.loading = false;
@@ -92,16 +90,37 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           () => {
-            this.router.navigate(['/clients']);
-            this.snackBar.open('Cliente adicionado', null, {
+            this.router.navigate(['/client']);
+            this.snackBar.open('Cliente atualizado', null, {
               duration: 3000
             });
           },
           err => {
-            this.loading = false;
             console.error(err);
+          },
+          () => {
+            this.loading = false;
           }
         );
     }
+  }
+
+  remove() {
+    this.loading = true;
+    this.apiService
+      .prep('client', 'remove')
+      .call(this.info)
+      .subscribe(
+        () => {
+          this.router.navigate(['/client']);
+          this.snackBar.open('Cliente excluído', null, {
+            duration: 3000
+          });
+        },
+        err => {
+          this.loading = false;
+          console.error(err);
+        }
+      );
   }
 }
