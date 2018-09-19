@@ -6,7 +6,7 @@ import {
   MatIconModule, MatInputModule,
   MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
   MatSidenavModule, MatSnackBarModule, MatSortModule, MatTableModule,
-  MatToolbarModule
+  MatToolbarModule, MatTooltipModule
 } from '@angular/material';
 
 const components = [
@@ -25,7 +25,8 @@ const components = [
   MatMenuModule,
   MatTableModule,
   MatPaginatorModule,
-  MatSortModule
+  MatSortModule,
+  MatTooltipModule
 ];
 
 @NgModule({
