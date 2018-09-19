@@ -4,7 +4,8 @@ import {ClientInfoComponent} from './info/client-info.component';
 import {ClientListComponent} from './list/client-list.component';
 
 export const CLIENT_ROUTES: Routes = [
-  {path: 'clients', component: ClientListComponent, canActivate: [AuthGuard]},
+  {path: 'client', component: ClientListComponent, canActivate: [AuthGuard]},
+  {path: 'clients', redirectTo: 'client'},
   {path: 'client/add', component: ClientInfoComponent, canActivate: [AuthGuard]},
   {path: 'client/:id', component: ClientInfoComponent, canActivate: [AuthGuard]},
 ];

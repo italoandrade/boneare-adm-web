@@ -25,7 +25,7 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
-    this.appComponent.title = 'Clientes';
+    this.appComponent.title = 'Cliente';
     this.dataSource = new ClientListDataSource(this.clientListService);
     this.dataSource.load(undefined, undefined, undefined, undefined, undefined);
     this.dataSource.subject.subscribe(items => {

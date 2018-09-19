@@ -16,7 +16,6 @@ export class AppComponent implements OnInit, OnDestroy {
   private readonly _mobileQueryListener: () => void;
   navOpened: boolean;
   @ViewChild('snav') snav;
-  menu: any;
   title: string;
   user: any;
   readyToGo = false;
@@ -27,10 +26,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.menu = [
-      {title: 'Início', icon: 'home', url: '/'},
-      {title: 'Iniciar sessão', icon: 'person', url: '/sign-in'},
-    ];
     this.apiService.init({
       apiUrl: environment.apiHost + environment.apiRoutes,
       apiHost: environment.apiHost,
