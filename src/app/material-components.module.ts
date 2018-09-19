@@ -1,7 +1,8 @@
 import {NgModule} from '@angular/core';
 import {
+  MatBadgeModule,
   MatButtonModule,
-  MatCardModule, MatDialogModule,
+  MatCardModule, MatDialogModule, MatExpansionModule,
   MatFormFieldModule,
   MatIconModule, MatInputModule,
   MatListModule, MatMenuModule, MatPaginatorModule, MatProgressBarModule, MatProgressSpinnerModule,
@@ -26,7 +27,9 @@ const components = [
   MatTableModule,
   MatPaginatorModule,
   MatSortModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatExpansionModule,
+  MatBadgeModule
 ];
 
 @NgModule({
