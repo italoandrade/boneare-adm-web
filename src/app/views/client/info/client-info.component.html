@@ -166,7 +166,7 @@
             <mat-label>Telefone</mat-label>
             <input matInput #phoneNumberField="ngModel" [name]="'phoneNumber' + i" [(ngModel)]="phone.number"
                    type="text" [mask]="(phone.number + '').length == 11 ? '(00) 0 0000-0000' : '(00) 0000-00000'" [disabled]="loading">
-            <button mat-icon-button type="button" matSuffix class="show-on-hover">
+            <button mat-icon-button type="button" matSuffix class="show-on-hover" (click)="info.phones.splice(i, 1)">
               <mat-icon>delete</mat-icon>
             </button>
           </mat-form-field>
@@ -176,10 +176,10 @@
             <mat-label>Novo telefone</mat-label>
             <input matInput #phoneNumberField="ngModel" name="newPhoneNumber" [(ngModel)]="info.phones.newPhone.number"
                    type="text" [mask]="(info.phones.newPhone.number + '').length == 11 ? '(00) 0 0000-0000' : '(00) 0000-00000'" [disabled]="loading">
-            <!--TODO: Fix the change before checked-->
             <button mat-icon-button type="button" matSuffix
-                    (click)="info.phones.push(info.phones.newPhone); info.phones.newPhone = {}"
+                    (click)="info.phones.push(info.phones.newPhone); info.phones.newPhone.number = null; changeDetectorRef.detectChanges()"
                     matTooltip="Adicionar telefone" matTooltipPosition="above">
+              <!--TODO: Still not removing-->
               <mat-icon>add</mat-icon>
             </button>
           </mat-form-field>
