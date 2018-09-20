@@ -86,3 +86,11 @@ mat-panel-title i {
   margin-left: 16px;
   color: #f44336;
 }
+
+mat-expansion-panel {
+  position: relative;
+}
+
+textarea.mat-input-element {
+  resize: none;
+}

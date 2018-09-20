@@ -1,9 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../../app.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ApiService} from '../../../utils/api.service';
 import {MatSnackBar} from '@angular/material';
+import {HttpClient} from '@angular/common/http';
+import {STATES} from './states';
 
 @Component({
   selector: 'app-client-info',
@@ -14,9 +16,11 @@ import {MatSnackBar} from '@angular/material';
 export class ClientInfoComponent implements OnInit {
   info: any;
   loading: boolean;
+  loadingZipCode: boolean;
+  states = STATES;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
-              private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
+              private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar, private http: HttpClient) {
     this.info = {
       address: {},
       phones: []
@@ -138,6 +142,36 @@ export class ClientInfoComponent implements OnInit {
           console.error(err);
         }
       );
+  }
+
+  searchZipCode(zipCode, numberFieldEl, zipCodeFieldEl) {
+    if (zipCode) {
+      this.loadingZipCode = true;
+      this.http.get(`https://viacep.com.br/ws/${zipCode}/json/`).subscribe(
+        (res: any) => {
+          if (!res.erro) {
+            this.info.address.street = res.logradouro;
+            this.info.address.complement = res.complemento;
+            this.info.address.district = res.bairro;
+            this.info.address.city = res.localidade;
+            this.info.address.state = res.uf;
+            numberFieldEl.focus();
+          } else {
+            this.snackBar.open('Endereço não encontrado', null, {
+              duration: 3000
+            });
+          }
+        }, () => {
+          this.snackBar.open('Endereço não encontrado', null, {
+            duration: 3000
+          });
+        }
+      ).add(() => {
+        this.loadingZipCode = false;
+      });
+    } else {
+      zipCodeFieldEl.focus();
+    }
   }
 }
 

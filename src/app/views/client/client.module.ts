@@ -11,6 +11,8 @@ import {DisplacerComponent, DisplacerPortalDirective} from '../../utils/displace
 import {FormsModule} from '@angular/forms';
 import {registerLocaleData} from '@angular/common';
 import localePt from '@angular/common/locales/pt';
+import {NgxMaskModule} from 'ngx-mask';
+import {TextareaAutosizeModule} from 'ngx-textarea-autosize';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -26,7 +28,9 @@ registerLocaleData(localePt, 'pt-BR');
     BrowserModule,
     RouterModule,
     FormsModule,
-    MaterialComponentsModule
+    MaterialComponentsModule,
+    NgxMaskModule.forRoot(),
+    TextareaAutosizeModule
   ],
   providers: [{provide: LOCALE_ID, useValue: 'pt-BR'}, {provide: MatPaginatorIntl, useClass: MatPaginatorIntlBra}, ClientListService]
 })

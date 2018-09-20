@@ -27,8 +27,8 @@
         <mat-progress-bar mode="query" [class.show]="loading"></mat-progress-bar>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            Informações <i *ngIf="!expansionOne.expanded && formInfo.touched && formInfo.invalid">contém campo inválido</i>
-            <!--TODO: Check every input for validation-->
+            Informações <i *ngIf="!expansionOne.expanded && nameField.touched && nameField.invalid">contém campo
+            inválido</i>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <p>
@@ -45,16 +45,27 @@
         </p>
         <p>
           <mat-form-field appearance="fill">
-            <mat-label>Razão social</mat-label>
-            <input matInput #companyNameField="ngModel" name="companyName" [(ngModel)]="info.companyName" type="text"
-                   maxlength="100"
-                   [disabled]="loading">
-            <mat-hint align="end" *ngIf="info.companyName?.length >= 100">{{info.companyName?.length || 0}}/100
+            <mat-label>Documento</mat-label>
+            <input matInput #documentField="ngModel" name="document" [(ngModel)]="info.document" type="text"
+                   maxlength="20" placeholder="CPF ou CNPJ" [disabled]="loading">
+            <mat-hint align="end" *ngIf="info.document?.length >= 20">
+              {{info.document?.length || 0}}/20
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Descrição</mat-label>
+            <textarea matInput #descriptionField="ngModel" name="description" [(ngModel)]="info.description"
+                      maxlength="200" [disabled]="loading" autosize></textarea>
+            <mat-hint align="end">
+              {{info.description?.length || 0}}/200
             </mat-hint>
           </mat-form-field>
         </p>
       </mat-expansion-panel>
       <mat-expansion-panel>
+        <mat-progress-bar mode="query" [class.show]="loadingZipCode"></mat-progress-bar>
         <mat-expansion-panel-header>
           <mat-panel-title>
             Endereço
@@ -62,10 +73,85 @@
         </mat-expansion-panel-header>
         <p>
           <mat-form-field appearance="fill">
-            <mat-label>Endereço</mat-label>
-            <input matInput #phoneNumberField="ngModel" name="newPhoneNumber" [(ngModel)]="info.address.address"
-                   type="text"
-                   [disabled]="loading">
+            <mat-label>CEP</mat-label>
+            <input matInput #zipCodeFieldEl #zipCodeField="ngModel" name="zipCode" [(ngModel)]="info.address.zipCode"
+                   type="tel" mask="00000-000" [disabled]="loading || loadingZipCode">
+            <button mat-icon-button type="button" matSuffix
+                    (click)="searchZipCode(info.address.zipCode, numberFieldEl, zipCodeFieldEl)"
+                    [disabled]="loading || loadingZipCode"
+                    matTooltip="Buscar informações do endereço" matTooltipPosition="above">
+              <mat-icon>search</mat-icon>
+            </button>
+            <mat-error *ngIf="zipCodeField.hasError('mask')">
+              Preencha com um CEP válido
+            </mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Rua</mat-label>
+            <input matInput #streetField="ngModel" name="street" [(ngModel)]="info.address.street" maxlength="200"
+                   type="text" [disabled]="loading || loadingZipCode">
+            <mat-hint align="end" *ngIf="info.address.street?.length >= 200">
+              {{info.address.street?.length || 0}}/200
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Número</mat-label>
+            <input matInput #numberFieldEl #numberField="ngModel" name="number" [(ngModel)]="info.address.number"
+                   maxlength="20"
+                   type="text" [disabled]="loading">
+            <mat-hint align="end" *ngIf="info.address.number?.length >= 20">
+              {{info.address.number?.length || 0}}/20
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Complemento</mat-label>
+            <input matInput #complementField="ngModel" name="complement" [(ngModel)]="info.address.complement"
+                   maxlength="200"
+                   type="text" [disabled]="loading || loadingZipCode">
+            <mat-hint align="end" *ngIf="info.address.complement?.length >= 200">
+              {{info.address.complement?.length || 0}}/200
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Bairro</mat-label>
+            <input matInput #districtField="ngModel" name="district" [(ngModel)]="info.address.district" maxlength="50"
+                   type="text" [disabled]="loading || loadingZipCode">
+            <mat-hint align="end" *ngIf="info.address.district?.length >= 50">
+              {{info.address.district?.length || 0}}/50
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Cidade</mat-label>
+            <input matInput #cityField="ngModel" name="city" [(ngModel)]="info.address.city" maxlength="50"
+                   type="text" [disabled]="loading || loadingZipCode">
+            <mat-hint align="end" *ngIf="info.address.city?.length >= 50">
+              {{info.address.city?.length || 0}}/50
+            </mat-hint>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Estado</mat-label>
+            <!--<input matInput #stateField="ngModel" name="state" [(ngModel)]="info.address.state" maxlength="50"
+                   type="text" [disabled]="loading || loadingZipCode">-->
+            <mat-select [(value)]="info.address.state" [disabled]="loading || loadingZipCode">
+              <mat-option *ngFor="let state of states" [value]="state.uf">
+                {{state.name}}
+              </mat-option>
+            </mat-select>
+            <mat-hint align="end" *ngIf="info.address.state?.length >= 50">
+              {{info.address.state?.length || 0}}/50
+            </mat-hint>
           </mat-form-field>
         </p>
       </mat-expansion-panel>
@@ -79,8 +165,7 @@
           <mat-form-field appearance="fill">
             <mat-label>Telefone</mat-label>
             <input matInput #phoneNumberField="ngModel" [name]="'phoneNumber' + i" [(ngModel)]="phone.number"
-                   type="text"
-                   [disabled]="loading">
+                   type="text" [mask]="(phone.number + '').length == 11 ? '(00) 0 0000-0000' : '(00) 0000-00000'" [disabled]="loading">
             <button mat-icon-button type="button" matSuffix class="show-on-hover">
               <mat-icon>delete</mat-icon>
             </button>
@@ -90,8 +175,8 @@
           <mat-form-field appearance="fill">
             <mat-label>Novo telefone</mat-label>
             <input matInput #phoneNumberField="ngModel" name="newPhoneNumber" [(ngModel)]="info.phones.newPhone.number"
-                   type="text"
-                   [disabled]="loading">
+                   type="text" [mask]="(info.phones.newPhone.number + '').length == 11 ? '(00) 0 0000-0000' : '(00) 0000-00000'" [disabled]="loading">
+            <!--TODO: Fix the change before checked-->
             <button mat-icon-button type="button" matSuffix
                     (click)="info.phones.push(info.phones.newPhone); info.phones.newPhone = {}"
                     matTooltip="Adicionar telefone" matTooltipPosition="above">
