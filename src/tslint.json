@@ -13,6 +13,7 @@
             "",
             "kebab-case"
         ],
-      "component-class-suffix": false
+      "component-class-suffix": false,
+      "no-input-rename": false
     }
 }

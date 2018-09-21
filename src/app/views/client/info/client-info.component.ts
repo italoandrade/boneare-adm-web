@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../../app.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
@@ -6,6 +6,7 @@ import {ApiService} from '../../../utils/api.service';
 import {MatSnackBar} from '@angular/material';
 import {HttpClient} from '@angular/common/http';
 import {STATES} from './states';
+import {elementClosest} from '../../../utils/element/closest.function';
 
 @Component({
   selector: 'app-client-info',
@@ -20,12 +21,15 @@ export class ClientInfoComponent implements OnInit {
   states = STATES;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
-              private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar, private http: HttpClient) {
+              private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar,
+              private http: HttpClient) {
     this.info = {
       address: {},
-      phones: []
+      phones: [],
+      emails: []
     };
     this.info.phones.newPhone = {};
+    this.info.emails.newEmail = {};
   }
 
   ngOnInit() {
@@ -68,9 +72,7 @@ export class ClientInfoComponent implements OnInit {
       if (input.invalid) {
         setTimeout(() => {
           const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
-          const expansionPanel = closest(inputElement, el => {
-            return el.classList.contains('mat-expansion-panel');
-          });
+          const expansionPanel = elementClosest(inputElement, 'mat-expansion-panel');
           if (expansionPanel && !expansionPanel.classList.contains('mat-expanded')) {
             expansionPanel.querySelector('mat-expansion-panel-header').click();
             setTimeout(() => {
@@ -173,8 +175,14 @@ export class ClientInfoComponent implements OnInit {
       zipCodeFieldEl.focus();
     }
   }
+
+  checkExpansionInvalid(expansion) {
+    try {
+      return !!expansion._body.nativeElement.querySelector('.ng-invalid');
+    } catch (e) {}
+
+
+    // !expansionFour.expanded && formInfo.touched && formInfo.invalid && formInfo.dirty
+  }
 }
 
-function closest(el, fn) {
-  return el && (fn(el) ? el : closest(el.parentNode, fn));
-}
