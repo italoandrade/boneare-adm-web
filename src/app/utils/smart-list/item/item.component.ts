@@ -39,7 +39,10 @@ export class SmartListItemComponent implements AfterViewInit {
       const target = event.target;
       if (!elementClosest(target, 'body')) {
         setTimeout(() => {
-          self.parent.element.nativeElement.children[self.parent.currentFocusedElementIndex].querySelector('input').focus();
+          const item = self.parent.element.nativeElement.children[self.parent.currentFocusedElementIndex];
+          if (item) {
+            item.querySelector('input').focus();
+          }
         }, 100);
       }
     });
