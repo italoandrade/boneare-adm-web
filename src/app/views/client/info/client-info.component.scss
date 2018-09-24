@@ -18,8 +18,8 @@ form {
   max-width: 600px;
 }
 
-mat-card {
-  overflow: hidden;
+.card-space {
+  position: relative;
 }
 
 mat-progress-bar {
@@ -27,6 +27,7 @@ mat-progress-bar {
   left: 0;
   top: 0;
   height: 0;
+  z-index: 1;
 
   &.show {
     height: 5px;
@@ -70,9 +71,6 @@ mat-card.mat-elevation-z0 {
   background-color: transparent;
 }
 
-mat-card + mat-card {
-  margin-top: 16px;
-}
 
 mat-form-field .show-on-hover:not(.nothing) {
   display: none;

@@ -19,6 +19,7 @@ export class ClientInfoComponent implements OnInit {
   loading: boolean;
   loadingZipCode: boolean;
   states = STATES;
+  expansionFourValid = true;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar,
@@ -28,8 +29,6 @@ export class ClientInfoComponent implements OnInit {
       phones: [],
       emails: []
     };
-    this.info.phones.newPhone = {};
-    this.info.emails.newEmail = {};
   }
 
   ngOnInit() {
@@ -176,13 +175,8 @@ export class ClientInfoComponent implements OnInit {
     }
   }
 
-  checkExpansionInvalid(expansion) {
-    try {
-      return !!expansion._body.nativeElement.querySelector('.ng-invalid');
-    } catch (e) {}
-
-
-    // !expansionFour.expanded && formInfo.touched && formInfo.invalid && formInfo.dirty
+  checkExpansionFourValid(expansion) {
+      this.expansionFourValid = !expansion._body.nativeElement.querySelector('.ng-invalid');
   }
 }
 
