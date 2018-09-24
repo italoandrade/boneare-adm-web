@@ -41,3 +41,7 @@ body {
   white-space:nowrap;
   overflow:hidden;
 }
+
+.active mat-icon svg {
+  fill: map_get(map_get($candy-app-theme, primary), 500);
+}
