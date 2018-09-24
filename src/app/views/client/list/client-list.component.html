@@ -6,7 +6,7 @@
   <div class="search">
     <mat-form-field appearance="outline">
       <mat-label>Pesquisa</mat-label>
-      <input matInput placeholder="Digite o número ou nome" #input type="search" name="search">
+      <input matInput placeholder="Digite o número, nome, documento, telefone ou e-mail" #input type="search" name="search">
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
   </div>
@@ -22,6 +22,13 @@
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
       <td mat-cell class="description-cell"
           *matCellDef="let item">{{item.name}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="document">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Documento</th>
+      <td mat-cell class="description-cell"
+          *matCellDef="let item">{{item.document}}
       </td>
     </ng-container>
 

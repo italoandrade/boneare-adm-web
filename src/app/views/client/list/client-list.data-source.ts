@@ -11,7 +11,7 @@ export class ClientListDataSource implements DataSource<any> {
 
   public loading$ = this.loadingSubject.asObservable();
 
-  constructor(private clientListService: ClientListService) {
+  constructor(private listService: ClientListService) {
   }
 
   connect(collectionViewer: CollectionViewer) {
@@ -26,7 +26,7 @@ export class ClientListDataSource implements DataSource<any> {
   load(filter, sortColumn, sortDirection, pageIndex, pageSize) {
     this.loadingSubject.next(true);
 
-    const listAll = this.clientListService.listAll(filter, sortColumn, sortDirection, pageIndex, pageSize);
+    const listAll = this.listService.listAll(filter, sortColumn, sortDirection, pageIndex, pageSize);
     if (listAll.pipe) {
       listAll
         .pipe(

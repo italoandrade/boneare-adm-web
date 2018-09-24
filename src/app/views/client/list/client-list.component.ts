@@ -13,7 +13,7 @@ import {fromEvent, merge} from 'rxjs';
 })
 
 export class ClientListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'name'];
+  displayedColumns = ['id', 'name', 'document'];
   dataSource: ClientListDataSource;
   totalLinesCount = null;
 
@@ -21,12 +21,12 @@ export class ClientListComponent implements OnInit, AfterViewInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('input') input: ElementRef;
 
-  constructor(private appComponent: AppComponent, private clientListService: ClientListService) {
+  constructor(private appComponent: AppComponent, private listService: ClientListService) {
   }
 
   ngOnInit() {
-    this.appComponent.title = 'Cliente';
-    this.dataSource = new ClientListDataSource(this.clientListService);
+    this.appComponent.title = 'Clientes';
+    this.dataSource = new ClientListDataSource(this.listService);
     this.dataSource.load(undefined, undefined, undefined, undefined, undefined);
     this.dataSource.subject.subscribe(items => {
       if (items) {
