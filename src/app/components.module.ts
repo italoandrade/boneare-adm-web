@@ -9,6 +9,12 @@ import {
   MatSidenavModule, MatSnackBarModule, MatSortModule, MatTableModule,
   MatToolbarModule, MatTooltipModule
 } from '@angular/material';
+import {MaskPhoneDirective} from './utils/masks/phone/mask-phone.directive';
+import {SmartListComponent} from './utils/smart-list/smart-list.component';
+import {SmartListItemComponent} from './utils/smart-list/item/item.component';
+import {MaskCepDirective} from './utils/masks/cep/mask-cep.directive';
+import {DisplacerComponent, DisplacerPortalDirective} from './utils/displacer';
+import {CurrencyMaskModule} from 'ng2-currency-mask';
 
 const components = [
   MatToolbarModule,
@@ -30,13 +36,24 @@ const components = [
   MatTooltipModule,
   MatExpansionModule,
   MatBadgeModule,
-  MatSelectModule
+  MatSelectModule,
+
+  CurrencyMaskModule
 ];
 
 @NgModule({
+  declarations: [
+    MaskPhoneDirective,
+    SmartListComponent,
+    SmartListItemComponent,
+    MaskCepDirective,
+
+    DisplacerComponent,
+    DisplacerPortalDirective
+  ],
   imports: components,
   exports: components
 })
-export class MaterialComponentsModule {
+export class ComponentsModule {
 }
 
