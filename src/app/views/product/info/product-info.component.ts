@@ -80,7 +80,7 @@ export class ProductInfoComponent implements OnInit {
           res => {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product/', res.id]);
-            this.snackBar.open('Produto adicionado', null, {
+            this.snackBar.open(res.message, null, {
               duration: 3000
             });
           },
@@ -94,10 +94,10 @@ export class ProductInfoComponent implements OnInit {
         .prep('product', 'update')
         .call(this.info)
         .subscribe(
-          () => {
+          res => {
             // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product']);
-            this.snackBar.open('Produto atualizado', null, {
+            this.snackBar.open(res.message, null, {
               duration: 3000
             });
           },
@@ -117,10 +117,10 @@ export class ProductInfoComponent implements OnInit {
       .prep('product', 'remove')
       .call(this.info)
       .subscribe(
-        () => {
+        res => {
           // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/product']);
-          this.snackBar.open('Produto excluído', null, {
+          this.snackBar.open(res.message, null, {
             duration: 3000
           });
         },

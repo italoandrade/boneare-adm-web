@@ -57,9 +57,9 @@ export class ApiService {
   }
 
   prep(functionality, method) {
-    const apiMethod = API[functionality][method];
-
     if (API[functionality] && API[functionality][method]) {
+      const apiMethod = API[functionality][method];
+
       return {
         call: (data?: {}, setHeaders?: {}, returnHttp?) => {
           let url = this.config.apiHost + apiMethod.path;
@@ -118,8 +118,7 @@ export class ApiService {
     } else {
       if (!API[functionality]) {
         console.error(`Funcionalidade [${functionality}] não encontrado`);
-      }
-      if (!API[functionality][method]) {
+      } else if (!API[functionality][method]) {
         console.error(`Método [${functionality}/${method}] não encontrado`);
       }
 
