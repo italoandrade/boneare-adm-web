@@ -27,7 +27,7 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   ngOnInit() {
     this.appComponent.title = 'Produtos';
     this.dataSource = new ProductListDataSource(this.listService);
-    this.dataSource.load(undefined, undefined, undefined, undefined, undefined);
+    this.dataSource.load();
     this.dataSource.subject.subscribe(items => {
       if (items) {
         this.totalLinesCount = items.length && (items[0].lineCount || 0);
@@ -61,13 +61,13 @@ export class ProductListComponent implements OnInit, AfterViewInit {
   loadPage() {
     this.dataSource.load(
       this.input.nativeElement.value ? this.input.nativeElement.value : undefined,
-      this.sort.direction ? this.sort.active : undefined,
+      this.sort.active ? this.sort.active : undefined,
       this.sort.direction ? this.sort.direction : undefined,
       this.paginator.pageIndex,
       this.paginator.pageSize);
   }
 
-  onRowClicked(row) {
+  onRowClicked = (row) => {
     sessionStorage.setItem('info', JSON.stringify(row));
   }
 }

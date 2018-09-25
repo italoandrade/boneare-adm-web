@@ -2,11 +2,11 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../../app.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ApiService} from '../../../utils/api.service';
+import {ApiService} from '../../../core/services/api.service';
 import {MatSnackBar} from '@angular/material';
-import {HttpClient} from '@angular/common/http';
 import {STATES} from './states';
-import {elementClosest} from '../../../utils/element/closest.function';
+import {elementClosest} from '../../../core/functions/closest.function';
+import {CepService} from '../../../core/services/cep.service';
 
 @Component({
   selector: 'app-client-info',
@@ -16,14 +16,13 @@ import {elementClosest} from '../../../utils/element/closest.function';
 
 export class ClientInfoComponent implements OnInit {
   info: any;
-  loading: boolean;
-  loadingZipCode: boolean;
+  loading = true;
   states = STATES;
   expansionFourValid = true;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar,
-              private http: HttpClient) {
+              public cepService: CepService) {
     this.info = {
       address: {},
       phones: [],
@@ -33,6 +32,7 @@ export class ClientInfoComponent implements OnInit {
 
   ngOnInit() {
     this.appComponent.title = 'Cliente';
+
     let infoFromTable: any = sessionStorage.getItem('info');
     try {
       infoFromTable = infoFromTable && JSON.parse(infoFromTable);
@@ -52,39 +52,28 @@ export class ClientInfoComponent implements OnInit {
             this.info = {...this.info, ...res};
           },
           err => {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/client']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
               });
             }
+          },
+          () => {
             this.loading = false;
           }
         );
+    } else {
+      this.loading = false;
     }
   }
 
   onSubmit(form) {
-    Object.keys(form.controls).forEach(i => {
-      const input = form.controls[i];
-      input.markAsTouched();
-      if (input.invalid) {
-        setTimeout(() => {
-          const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
-          const expansionPanel = elementClosest(inputElement, 'mat-expansion-panel');
-          if (expansionPanel && !expansionPanel.classList.contains('mat-expanded')) {
-            expansionPanel.querySelector('mat-expansion-panel-header').click();
-            setTimeout(() => {
-              inputElement.focus();
-            }, 200);
-          } else {
-            inputElement.focus();
-          }
-        });
-      }
-    });
+    this.validateForm(form);
 
     this.loading = true;
+
     if (form.invalid) {
       return this.loading = false;
     }
@@ -95,14 +84,18 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            this.router.navigate(['/client/', res.id]);
-            this.snackBar.open('Cliente adicionado', null, {
+            // noinspection JSIgnoredPromiseFromCall
+            this.router.navigate(['/client/', res.returning.id]);
+            this.snackBar.open(res.message, null, {
               duration: 3000
             });
           },
           err => {
+            console.log(err); // TODO: REMOVER
             this.loading = false;
-            console.error(err);
+            this.snackBar.open(err.error.message, null, {
+              duration: 3000
+            });
           }
         );
     } else {
@@ -110,9 +103,10 @@ export class ClientInfoComponent implements OnInit {
         .prep('client', 'update')
         .call(this.info)
         .subscribe(
-          () => {
+          res => {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/client']);
-            this.snackBar.open('Cliente atualizado', null, {
+            this.snackBar.open(res.message, null, {
               duration: 3000
             });
           },
@@ -132,9 +126,10 @@ export class ClientInfoComponent implements OnInit {
       .prep('client', 'remove')
       .call(this.info)
       .subscribe(
-        () => {
+        res => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/client']);
-          this.snackBar.open('Cliente excluído', null, {
+          this.snackBar.open(res.message, null, {
             duration: 3000
           });
         },
@@ -145,38 +140,29 @@ export class ClientInfoComponent implements OnInit {
       );
   }
 
-  searchZipCode(zipCode, numberFieldEl, zipCodeFieldEl) {
-    if (zipCode) {
-      this.loadingZipCode = true;
-      this.http.get(`https://viacep.com.br/ws/${zipCode}/json/`).subscribe(
-        (res: any) => {
-          if (!res.erro) {
-            this.info.address.street = res.logradouro;
-            this.info.address.complement = res.complemento;
-            this.info.address.district = res.bairro;
-            this.info.address.city = res.localidade;
-            this.info.address.state = res.uf;
-            numberFieldEl.focus();
+  validateForm(form) {
+    Object.keys(form.controls).forEach(i => {
+      const input = form.controls[i];
+      input.markAsTouched();
+      if (input.invalid) {
+        setTimeout(() => {
+          const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
+          const expansionPanel = elementClosest(inputElement, 'mat-expansion-panel');
+          if (expansionPanel && !expansionPanel.classList.contains('mat-expanded')) {
+            expansionPanel.querySelector('mat-expansion-panel-header').click();
+            setTimeout(() => {
+              inputElement.focus();
+            }, 200);
           } else {
-            this.snackBar.open('Endereço não encontrado', null, {
-              duration: 3000
-            });
+            inputElement.focus();
           }
-        }, () => {
-          this.snackBar.open('Endereço não encontrado', null, {
-            duration: 3000
-          });
-        }
-      ).add(() => {
-        this.loadingZipCode = false;
-      });
-    } else {
-      zipCodeFieldEl.focus();
-    }
+        });
+      }
+    });
   }
 
   checkExpansionFourValid(expansion) {
-      this.expansionFourValid = !expansion._body.nativeElement.querySelector('.ng-invalid');
+    this.expansionFourValid = !expansion._body.nativeElement.querySelector('.ng-invalid');
   }
 }
 

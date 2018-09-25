@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {MatDialogRef} from '@angular/material';
 
 @Component({
@@ -6,11 +6,8 @@ import {MatDialogRef} from '@angular/material';
   templateUrl: 'api-unavailable.dialog.html'
 })
 
-export class ApiUnavailableDialog implements OnInit {
+export class ApiUnavailableDialog {
   constructor(public dialogRef: MatDialogRef<ApiUnavailableDialog>) {
-  }
-
-  ngOnInit() {
   }
 
   onTryAgainClick() {

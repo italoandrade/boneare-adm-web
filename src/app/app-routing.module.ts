@@ -3,7 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from './views/home/home.component';
 import {NotFoundComponent} from './views/not-found/not-found.component';
 import {SignInComponent} from './views/sign-in/sign-in.component';
-import {ReverseAuthGuard} from './utils/auth.guard';
+import {ReverseAuthGuard} from './core/services/auth.guard';
 import {CLIENT_ROUTES} from './views/client/client.routes';
 import {PRODUCT_ROUTES} from './views/product/product.routes';
 
@@ -22,4 +22,3 @@ const APP_ROUTES: Routes = [
 })
 export class AppRoutingModule {
 }
-

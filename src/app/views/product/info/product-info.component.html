@@ -28,6 +28,7 @@
         <p>
           <mat-form-field appearance="fill">
             <mat-label>Nome</mat-label>
+            <!--suppress HtmlFormInputWithoutLabel -->
             <input matInput #nameField="ngModel" name="name" [(ngModel)]="info.name" type="text" required
                    maxlength="100" [disabled]="loading">
             <mat-error *ngIf="nameField.hasError('required')">

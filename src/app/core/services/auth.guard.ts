@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
       return new Observable((observer) => {
         const timeout = setTimeout(() => {
           observer.next(false);
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
           this.snackBar.open('Tempo para verificar sua sessão esgotou', null, {
             duration: 3000
@@ -24,6 +25,7 @@ export class AuthGuard implements CanActivate {
           clearTimeout(timeout);
           observer.next(!!user);
           if (!user) {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['sign-in']);
             this.snackBar.open('Para acessar essa página você tem que iniciar a sessão', null, {
               duration: 3000
@@ -33,6 +35,7 @@ export class AuthGuard implements CanActivate {
       });
     } else {
       if (!this.userService.user) {
+        // noinspection JSIgnoredPromiseFromCall
         this.router.navigate(['sign-in']);
         this.snackBar.open('Para acessar essa página você tem que iniciar a sessão', null, {
           duration: 3000
@@ -51,6 +54,7 @@ export class ReverseAuthGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.userService.user) {
+      // noinspection JSIgnoredPromiseFromCall
       this.router.navigate(['/']);
       this.snackBar.open('Você já está com a sessão iniciada', null, {
         duration: 3000

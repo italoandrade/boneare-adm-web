@@ -1,15 +1,15 @@
 import {ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ApiService} from './utils/api.service';
+import {ApiService} from './core/services/api.service';
 import {environment} from '../environments/environment';
-import {UserService} from './utils/user.service';
-import {ColorProvider} from './utils/color.provider';
+import {UserService} from './core/services/user.service';
 import {Router} from '@angular/router';
+import {isColorBright} from './core/functions/is-color-bright.function';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  templateUrl: 'app.component.html',
+  styleUrls: ['app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
@@ -20,9 +20,10 @@ export class AppComponent implements OnInit, OnDestroy {
   user: any;
   readyToGo = false;
   loading = true;
+  isColorBright = isColorBright;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private apiService: ApiService,
-              private userService: UserService, public colorProvider: ColorProvider, private router: Router) {
+              private userService: UserService, private router: Router) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
@@ -61,6 +62,7 @@ export class AppComponent implements OnInit, OnDestroy {
   signOut() {
     this.userService.set(null);
     this.userService.setToken(null);
+    // noinspection JSIgnoredPromiseFromCall
     this.router.navigate(['/']);
   }
 }

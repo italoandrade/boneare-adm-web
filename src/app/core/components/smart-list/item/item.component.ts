@@ -1,6 +1,6 @@
 import {Component, ElementRef, Inject, AfterViewInit} from '@angular/core';
 import {SmartListComponent} from '../smart-list.component';
-import {elementClosest} from '../../element/closest.function';
+import {elementClosest} from '../../../functions/closest.function';
 
 @Component({
   selector: 'smart-list-item',
@@ -26,13 +26,13 @@ export class SmartListItemComponent implements AfterViewInit {
     }
   }
 
-  onFocus(event, self) {
+  onFocus = (event, self) => {
     const el = event.target;
 
     const elItem = elementClosest(el, 'smart-list-item');
     const newIndex = Array.prototype.indexOf.call(self.parent.element.nativeElement.children, elItem);
     self.parent.currentFocusedElementIndex = newIndex > -1 ? newIndex : self.parent.currentFocusedElementIndex;
-  }
+  };
 
   onBlur(event, self) {
     setTimeout(() => {

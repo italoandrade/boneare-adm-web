@@ -4,7 +4,7 @@ import {
 } from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {PhonePipe} from './phone.pipe';
-import {getCaretPosition, setCaretPosition} from '../../element/caret-position.functions';
+import {getCaretPosition, setCaretPosition} from '../../functions/caret-position.functions';
 
 @Directive({
   selector: '[maskPhone][ngModel]',

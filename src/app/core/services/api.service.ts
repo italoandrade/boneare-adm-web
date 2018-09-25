@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {ApiUnavailableDialog} from '../dialogs/api-unavailable.dialog';
+import {ApiUnavailableDialog} from '../../dialogs/api-unavailable.dialog';
 import {MatDialog} from '@angular/material';
 import {Observable} from 'rxjs';
 
@@ -124,7 +124,7 @@ export class ApiService {
       }
 
       return {
-        call: (..._) => {
+        call: () => {
           return new Observable();
         }
       };
@@ -157,3 +157,4 @@ function jsonToParams(url, data) {
     data: dataClone
   };
 }
+

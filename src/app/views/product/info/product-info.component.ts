@@ -2,7 +2,7 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../../app.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
-import {ApiService} from '../../../utils/api.service';
+import {ApiService} from '../../../core/services/api.service';
 import {MatSnackBar} from '@angular/material';
 
 @Component({
@@ -33,6 +33,7 @@ export class ProductInfoComponent implements OnInit {
     }
 
     if (id) {
+      this.loading = true;
       this.apiService
         .prep('product', 'findById')
         .call({id})
@@ -41,12 +42,15 @@ export class ProductInfoComponent implements OnInit {
             this.info = {...this.info, ...res};
           },
           err => {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
               });
             }
+          },
+          () => {
             this.loading = false;
           }
         );
@@ -74,6 +78,7 @@ export class ProductInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product/', res.id]);
             this.snackBar.open('Produto adicionado', null, {
               duration: 3000
@@ -90,6 +95,7 @@ export class ProductInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           () => {
+            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product']);
             this.snackBar.open('Produto atualizado', null, {
               duration: 3000
@@ -112,6 +118,7 @@ export class ProductInfoComponent implements OnInit {
       .call(this.info)
       .subscribe(
         () => {
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/product']);
           this.snackBar.open('Produto excluído', null, {
             duration: 3000

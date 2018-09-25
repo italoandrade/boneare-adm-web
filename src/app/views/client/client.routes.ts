@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {AuthGuard} from '../../utils/auth.guard';
+import {AuthGuard} from '../../core/services/auth.guard';
 import {ClientInfoComponent} from './info/client-info.component';
 import {ClientListComponent} from './list/client-list.component';
 

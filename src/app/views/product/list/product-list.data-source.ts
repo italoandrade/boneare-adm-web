@@ -9,9 +9,10 @@ export class ProductListDataSource implements DataSource<any> {
   public subject = new BehaviorSubject<any>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 
-  public loading$ = this.loadingSubject.asObservable();
+  public loading$;
 
   constructor(private listService: ProductListService) {
+    this.loading$ = this.loadingSubject.asObservable();
   }
 
   connect(collectionViewer: CollectionViewer) {
@@ -23,7 +24,7 @@ export class ProductListDataSource implements DataSource<any> {
     this.loadingSubject.complete();
   }
 
-  load(filter, sortColumn, sortDirection, pageIndex, pageSize) {
+  load(filter?, sortColumn?, sortDirection?, pageIndex?, pageSize?) {
     this.loadingSubject.next(true);
 
     const listAll = this.listService.listAll(filter, sortColumn, sortDirection, pageIndex, pageSize);

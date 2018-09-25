@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AppComponent} from '../../app.component';
-import {ApiService} from '../../utils/api.service';
-import {UserService} from '../../utils/user.service';
+import {ApiService} from '../../core/services/api.service';
+import {UserService} from '../../core/services/user.service';
 import {MatSnackBar} from '@angular/material';
 import {Router} from '@angular/router';
 
@@ -29,6 +29,7 @@ export class SignInComponent implements OnInit {
     this.appComponent.title = 'Iniciar sessão';
 
     if (this.userService.user) {
+      // noinspection JSIgnoredPromiseFromCall
       this.router.navigate(['/']);
       setTimeout(() => {
         this.snackBar.open('Você já está com a sessão iniciada', null, {
@@ -51,6 +52,7 @@ export class SignInComponent implements OnInit {
         res => {
           this.userService.set(res.user);
           this.userService.setToken(res.token);
+          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
         },
         err => {

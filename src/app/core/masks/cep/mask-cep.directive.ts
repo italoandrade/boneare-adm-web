@@ -1,7 +1,7 @@
 import {Directive, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output, AfterViewInit, OnChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
 import {UiCepPipe} from './cep.pipe';
-import {getCaretPosition, setCaretPosition} from '../../element/caret-position.functions';
+import {getCaretPosition, setCaretPosition} from '../../functions/caret-position.functions';
 
 @Directive({
   selector: '[maskCep][ngModel]',

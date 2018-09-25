@@ -1,9 +1,9 @@
 import {CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule} from '@angular/core';
 import {ProductListComponent} from './list/product-list.component';
-import {ComponentsModule} from '../../components.module';
+import {ComponentsModule} from '../../core/components/components.module';
 import {RouterModule} from '@angular/router';
 import {MatPaginatorIntl} from '@angular/material';
-import {MatPaginatorIntlBra} from '../../utils/matPaginatorIntlBra';
+import {MatPaginatorIntlBra} from '../../core/utils/matPaginatorIntlBra';
 import {BrowserModule} from '@angular/platform-browser';
 import {ProductListService} from './list/product-list.service';
 import {ProductInfoComponent} from './info/product-info.component';

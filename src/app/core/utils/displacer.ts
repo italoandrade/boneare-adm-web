@@ -2,7 +2,7 @@ import {AfterViewInit, Component, Directive, OnDestroy, TemplateRef, ViewChild, 
 import {TemplatePortal} from '@angular/cdk/portal';
 import {Overlay, OverlayConfig, OverlayRef} from '@angular/cdk/overlay';
 
-@Directive({ selector: '[displacerPortal]' })
+@Directive({selector: '[displacerPortal]'})
 export class DisplacerPortalDirective extends TemplatePortal<any> {
   constructor(templateRef: TemplateRef<any>, viewContainerRef: ViewContainerRef) {
     super(templateRef, viewContainerRef);
@@ -18,15 +18,13 @@ export class DisplacerPortalDirective extends TemplatePortal<any> {
   `
 })
 export class DisplacerComponent implements OnDestroy, AfterViewInit {
-
   private _config = new OverlayConfig();
-
   @ViewChild(DisplacerPortalDirective)
   private _portal: DisplacerPortalDirective;
-
   private _overlayRef: OverlayRef = undefined;
 
-  constructor(private _overlay: Overlay) {}
+  constructor(private _overlay: Overlay) {
+  }
 
   public ngOnDestroy() {
     this._overlayRef.detach();

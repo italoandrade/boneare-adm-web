@@ -34,6 +34,7 @@
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
 
+    <!--suppress UnnecessaryLabelJS -->
     <tr mat-row *matRowDef="let row; columns: displayedColumns"
         (click)="onRowClicked(row)" [routerLink]="['/client', row.id]">
     </tr>

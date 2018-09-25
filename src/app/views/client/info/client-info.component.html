@@ -68,7 +68,7 @@
           </p>
         </mat-expansion-panel>
         <mat-expansion-panel>
-          <mat-progress-bar mode="query" [class.show]="loadingZipCode"></mat-progress-bar>
+          <mat-progress-bar mode="query" [class.show]="cepService.loadingCep"></mat-progress-bar>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Endereço
@@ -78,10 +78,10 @@
             <mat-form-field appearance="fill">
               <mat-label>CEP</mat-label>
               <input matInput #zipCodeFieldEl #zipCodeField="ngModel" name="zipCode" [(ngModel)]="info.address.zipCode"
-                     type="tel" maskCep [disabled]="loading || loadingZipCode">
+                     type="tel" maskCep [disabled]="loading || cepService.loadingCep">
               <button mat-icon-button type="button" matSuffix
-                      (click)="searchZipCode(info.address.zipCode, numberFieldEl, zipCodeFieldEl)"
-                      [disabled]="loading || loadingZipCode"
+                      (click)="this.info.address = cepService.searchCep(info.address.zipCode, numberFieldEl, zipCodeFieldEl)"
+                      [disabled]="loading || cepService.loadingCep"
                       matTooltip="Buscar informações do endereço" matTooltipPosition="above">
                 <mat-icon>search</mat-icon>
               </button>
@@ -94,7 +94,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Rua</mat-label>
               <input matInput #streetField="ngModel" name="street" [(ngModel)]="info.address.street" maxlength="200"
-                     type="text" [disabled]="loading || loadingZipCode">
+                     type="text" [disabled]="loading || cepService.loadingCep">
               <mat-hint align="end" *ngIf="info.address.street?.length >= 200">
                 {{info.address.street?.length || 0}}/200
               </mat-hint>
@@ -116,7 +116,7 @@
               <mat-label>Complemento</mat-label>
               <input matInput #complementField="ngModel" name="complement" [(ngModel)]="info.address.complement"
                      maxlength="200"
-                     type="text" [disabled]="loading || loadingZipCode">
+                     type="text" [disabled]="loading || cepService.loadingCep">
               <mat-hint align="end" *ngIf="info.address.complement?.length >= 200">
                 {{info.address.complement?.length || 0}}/200
               </mat-hint>
@@ -127,7 +127,7 @@
               <mat-label>Bairro</mat-label>
               <input matInput #districtField="ngModel" name="district" [(ngModel)]="info.address.district"
                      maxlength="50"
-                     type="text" [disabled]="loading || loadingZipCode">
+                     type="text" [disabled]="loading || cepService.loadingCep">
               <mat-hint align="end" *ngIf="info.address.district?.length >= 50">
                 {{info.address.district?.length || 0}}/50
               </mat-hint>
@@ -137,7 +137,7 @@
             <mat-form-field appearance="fill">
               <mat-label>Cidade</mat-label>
               <input matInput #cityField="ngModel" name="city" [(ngModel)]="info.address.city" maxlength="50"
-                     type="text" [disabled]="loading || loadingZipCode">
+                     type="text" [disabled]="loading || cepService.loadingCep">
               <mat-hint align="end" *ngIf="info.address.city?.length >= 50">
                 {{info.address.city?.length || 0}}/50
               </mat-hint>
@@ -147,8 +147,8 @@
             <mat-form-field appearance="fill">
               <mat-label>Estado</mat-label>
               <!--<input matInput #stateField="ngModel" name="state" [(ngModel)]="info.address.state" maxlength="50"
-                     type="text" [disabled]="loading || loadingZipCode">-->
-              <mat-select [(value)]="info.address.state" [disabled]="loading || loadingZipCode">
+                     type="text" [disabled]="loading || cepService.loadingCep">-->
+              <mat-select [(value)]="info.address.state" [disabled]="loading || cepService.loadingCep">
                 <mat-option *ngFor="let state of states" [value]="state.uf">
                   {{state.name}}
                 </mat-option>
@@ -227,7 +227,7 @@
           </span>
     </mat-card>
 
-    <!--<pre>{{info | json}}</pre>-->
+    <pre>{{info | json}}</pre>
   </form>
 </div>
 
