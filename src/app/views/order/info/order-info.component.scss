@@ -1,0 +1,72 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+.center {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+p > * {
+  width: 100%;
+}
+
+form {
+  width: 100%;
+  max-width: 600px;
+}
+
+.card-space {
+  position: relative;
+}
+
+mat-progress-bar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 0;
+  z-index: 1;
+
+  &.show {
+    height: 5px;
+  }
+}
+
+.fab-container {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
+.fab-container-space {
+  height: 74px;
+}
+
+:host-context(.is-mobile) .fab-container-space {
+  height: 82px;
+}
+
+mat-toolbar {
+  background-color: transparent;
+  a + span {
+    margin-left: 16px;
+  }
+  span + button {
+    margin-left: 16px;
+  }
+}
+
+.manut {
+  opacity: 0.6;
+  font-size: 12px;
+}
+
+mat-card.mat-elevation-z0 {
+  background-color: transparent;
+}

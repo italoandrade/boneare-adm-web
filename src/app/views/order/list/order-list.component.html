@@ -1,0 +1,74 @@
+<div class="table mat-elevation-z2">
+  <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+  </div>
+
+  <div class="search">
+    <mat-form-field appearance="outline">
+      <mat-label>Pesquisa</mat-label>
+      <input matInput placeholder="Digite o número ou nome" #input type="search" name="search">
+      <mat-icon matPrefix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 38px">#</th>
+      <td mat-cell *matCellDef="let item">{{item.id}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Nome</th>
+      <td mat-cell class="description-cell"
+          *matCellDef="let item">{{item.name}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="client">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+      <td mat-cell class="description-cell"
+          *matCellDef="let item">{{item.client}}
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalCost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Preço</th>
+      <!--suppress JSUnresolvedVariable -->
+      <td mat-cell *matCellDef="let item">{{item.totalCost}}</td>
+      <td mat-footer-cell *matFooterCellDef>{{totalCostAll}}</td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"
+        (click)="onRowClicked(row)" [routerLink]="['/order', row.id]">
+    </tr>
+    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+  </table>
+
+  <mat-paginator [length]="totalLinesCount" [pageSize]="10"
+                 [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
+
+  <mat-toolbar color="primary" *ngIf="!(dataSource.loading$ | async) && totalLinesCount == 0">
+    Nenhum resultado encontrado
+    <span style="flex: 1"></span>
+    <button mat-icon-button (click)="loadPage()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </mat-toolbar>
+  <mat-toolbar color="primary" *ngIf="!(dataSource.loading$ | async) && totalLinesCount == null">
+    Não foi possível carregar
+    <span style="flex: 1"></span>
+    <button mat-flat-button (click)="loadPage()">TENTAR NOVAMENTE</button>
+  </mat-toolbar>
+</div>
+
+<div class="fab-container-space"></div>
+
+<app-fnls-displacer>
+  <div class="fab-container">
+    <a mat-fab color="accent" routerLink="/order/add" matTooltip="Novo pedido" matTooltipPosition="above">
+      <i class="material-icons">add</i>
+    </a>
+  </div>
+</app-fnls-displacer>

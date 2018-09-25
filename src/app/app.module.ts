@@ -17,10 +17,12 @@ import {ComponentsModule} from './core/components/components.module';
 import {HomeComponent} from './views/home/home.component';
 import {NotFoundComponent} from './views/not-found/not-found.component';
 import {SignInComponent} from './views/sign-in/sign-in.component';
-import {ClientModule} from './views/client/client.module';
-import {ProductModule} from './views/product/product.module';
 
 import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
+
+import {ClientModule} from './views/client/client.module';
+import {ProductModule} from './views/product/product.module';
+import {OrderModule} from './views/order/order.module';
 
 @NgModule({
   declarations: [
@@ -44,7 +46,8 @@ import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
     ComponentsModule,
 
     ClientModule,
-    ProductModule
+    ProductModule,
+    OrderModule
   ],
   providers: [ApiService, UserService, AuthGuard, ReverseAuthGuard],
   bootstrap: [AppComponent],

@@ -6,12 +6,14 @@ import {SignInComponent} from './views/sign-in/sign-in.component';
 import {ReverseAuthGuard} from './core/services/auth.guard';
 import {CLIENT_ROUTES} from './views/client/client.routes';
 import {PRODUCT_ROUTES} from './views/product/product.routes';
+import {ORDER_ROUTES} from './views/order/order.routes';
 
 const APP_ROUTES: Routes = [
   {path: '', component: HomeComponent},
   {path: 'sign-in', component: SignInComponent, canActivate: [ReverseAuthGuard]},
   ...CLIENT_ROUTES,
   ...PRODUCT_ROUTES,
+  ...ORDER_ROUTES,
   {path: '**', component: NotFoundComponent}
 ];
 

@@ -1,0 +1,22 @@
+import {Injectable} from '@angular/core';
+import {ApiService} from '../../../core/services/api.service';
+
+@Injectable()
+export class OrderListService {
+
+  constructor(private apiService: ApiService) {
+  }
+
+  listAll(filter, sortColumn, sortOrder, pageNumber = 0, pageSize = 10) {
+    return this
+      .apiService
+      .prep('order', 'findAll')
+      .call({
+        filter,
+        sortColumn,
+        sortOrder,
+        pageNumber,
+        pageSize
+      }, undefined, true);
+  }
+}

@@ -1,0 +1,91 @@
+<div class="center">
+  <form #formInfo="ngForm" (submit)="onSubmit(formInfo)">
+    <mat-toolbar>
+      <!--<mat-card-title>-->
+      <a mat-icon-button type="button" [disabled]="loading" routerLink="/order" matTooltip="Ir para lista"
+         matTooltipPosition="below">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <span *ngIf="!info.id">Novo pedido</span>
+      <span *ngIf="info.id" [title]="info.name" class="ellipsis">
+          {{(info.name?.length > 40 ? (info.name | slice:0:40) + '...' : info.name)}}
+        </span>
+      <span style="flex: 1"></span>
+      <button mat-icon-button type="button" *ngIf="info.id" [matMenuTriggerFor]="removeMenu" [disabled]="loading"
+              matTooltip="Excluir pedido" matTooltipPosition="below">
+        <mat-icon>delete</mat-icon>
+      </button>
+      <mat-menu #removeMenu="matMenu">
+        <div class="mat-menu-header">Você realmente deseja excluir?</div>
+        <button mat-menu-item (click)="remove()">Sim</button>
+        <button mat-menu-item>Não</button>
+      </mat-menu>
+      <!--</mat-card-title>-->
+    </mat-toolbar>
+    <div class="card-space">
+      <mat-progress-bar mode="query" [class.show]="loading"></mat-progress-bar>
+      <mat-card>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Nome</mat-label>
+            <!--suppress HtmlFormInputWithoutLabel -->
+            <input matInput #nameField="ngModel" name="name" [(ngModel)]="info.name" type="text" required
+                   maxlength="100" [disabled]="loading">
+            <mat-error *ngIf="nameField.hasError('required')">
+              Preencha com o nome
+            </mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Peso da unidade</mat-label>
+            <!--suppress JSUnresolvedVariable -->
+            <input matInput #unitWeightField="ngModel" name="unitWeight" [(ngModel)]="info.unitWeight" type="text"
+                   required currencyMask [options]="{ prefix: '', suffix: 'kg', thousands: '.', decimal: ',' }"
+                   placeholder="Em quilogramas" [disabled]="loading">
+            <mat-error *ngIf="unitWeightField.hasError('required')">
+              Preencha com o peso da unidade
+            </mat-error>
+          </mat-form-field>
+        </p>
+        <p>
+          <mat-form-field appearance="fill">
+            <mat-label>Valor</mat-label>
+            <input matInput #priceField="ngModel" name="price" [(ngModel)]="info.price" type="text"
+                   required currencyMask [options]="{ prefix: 'R$ ', suffix: '', thousands: '.', decimal: ',' }"
+                   placeholder="Em reais" [disabled]="loading">
+            <mat-error *ngIf="priceField.hasError('required')">
+              Preencha com o preço
+            </mat-error>
+          </mat-form-field>
+        </p>
+      </mat-card>
+    </div>
+
+    <mat-toolbar *ngIf="!appComponent.mobileQuery.matches">
+      <span style="flex: 1"></span>
+      <button mat-raised-button color="success" [disabled]="loading">{{!info.id ? 'ADICIONAR' : 'SALVAR'}}</button>
+    </mat-toolbar>
+
+    <mat-card class="manut mat-elevation-z0" *ngIf="info.createdBy">
+      Criado por {{info.createdBy}} em
+      <span [title]="info.creationDate | date : 'full'">{{info.creationDate | date : 'medium'}}</span>
+      <span *ngIf="info.updatedBy">
+            <br>Alterado por {{info.updatedBy}} em
+            <span [title]="info.lastUpdateDate | date : 'full'">{{info.lastUpdateDate | date : 'medium'}}</span>
+          </span>
+    </mat-card>
+
+    <!--<pre>{{info | json}}</pre>-->
+  </form>
+</div>
+
+<div class="fab-container-space" *ngIf="appComponent.mobileQuery.matches"></div>
+
+<app-fnls-displacer>
+  <div class="fab-container" *ngIf="appComponent.mobileQuery.matches">
+    <button mat-fab color="success" (click)="onSubmit(formInfo)" [disabled]="loading">
+      <i class="material-icons">check</i>
+    </button>
+  </div>
+</app-fnls-displacer>

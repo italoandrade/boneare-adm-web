@@ -61,6 +61,13 @@
           </a>
         </div>
         <div *ngIf="!loading && readyToGo && user">
+          <a mat-list-item routerLink="/order" routerLinkActive="active"
+             (click)="mobileQuery.matches && snav.close()">
+            <mat-icon matListIcon>shopping_cart</mat-icon>
+            <p matLine>Pedidos</p>
+          </a>
+        </div>
+        <div *ngIf="!loading && readyToGo && user">
           <a mat-list-item routerLink="/product" routerLinkActive="active"
              (click)="mobileQuery.matches && snav.close()">
             <mat-icon matListIcon>
@@ -72,13 +79,17 @@
             <p matLine>Produtos</p>
           </a>
         </div>
-        <div *ngIf="!loading && readyToGo && user">
-          <a mat-list-item routerLink="/order" routerLinkActive="active"
+        <!--<div *ngIf="!loading && readyToGo && user">
+          <a mat-list-item routerLink="/stock" routerLinkActive="active"
              (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>shopping_cart</mat-icon>
-            <p matLine>Pedidos</p>
+            <mat-icon matListIcon>
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z"></path>
+              </svg>
+            </mat-icon>
+            <p matLine>Estoque</p>
           </a>
-        </div>
+        </div>-->
       </mat-nav-list>
     </mat-sidenav>
 
