@@ -49,9 +49,11 @@
           <p>
             <mat-form-field appearance="fill">
               <mat-label>Cliente</mat-label>
-              <input matInput #clientFieldEl #clientField="ngModel" name="client" type="text" placeholder="Escolha um cliente"
+              <input matInput #clientFieldEl #clientField="ngModel" name="client" type="text"
+                     placeholder="Escolha um cliente"
                      [(ngModel)]="clientSelected" [matAutocomplete]="clientAutocomplete"
-                     (keyup)="clientAutocompleteFilter(clientFieldEl.value)" (focus)="subPanelScroll()">
+                     (keyup)="clientAutocompleteFilter(clientFieldEl.value)" (focus)="subPanelScroll()"
+                     (blur)="clientSelected == clientFieldEl.value ? info.client = clientSelected = undefined : null">
               <mat-autocomplete #clientAutocomplete="matAutocomplete" [displayWith]="clientDisplayFn">
                 <mat-option *ngFor="let client of clients" [value]="client">
                   {{client.name}}
@@ -64,25 +66,131 @@
         <mat-expansion-panel>
           <mat-expansion-panel-header>
             <mat-panel-title>
+              Produtos
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <mat-list>
+            <mat-list-item *ngFor="let product of info.products; let i = index">
+              <p matLine>
+                <span> {{product.name}} </span>
+                <span> x{{product.quantity}} </span>
+              </p>
+              <p matLine>
+                {{(product.quantity * product.price) | currency : 'R$'}}
+              </p>
+              <button mat-icon-button type="button" matSuffix
+                      (click)="productSelected = newProduct = info.products.splice(i, 1)[0]"
+                      matTooltip="Editar produto" matTooltipPosition="above">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" matSuffix (click)="info.products.splice(i, 1)"
+                      matTooltip="Remover produto" matTooltipPosition="above">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-list-item>
+            <mat-list-item>
+              <p matLine>
+                <span style="font-weight: 500">Total</span>
+              </p>
+              <p matLine>
+                {{calcProductTotal() | currency : 'R$'}}
+              </p>
+            </mat-list-item>
+          </mat-list>
+          <div class="flex-container">
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Produto</mat-label>
+                <input matInput #productFieldEl #productField="ngModel" name="product" type="text"
+                       placeholder="Escolha um produto"
+                       [(ngModel)]="productSelected" [matAutocomplete]="productAutocomplete"
+                       (keyup)="productAutocompleteFilter(productFieldEl.value)" (focus)="subPanelScroll()"
+                       (blur)="productSelected == productFieldEl.value ? productSelected = undefined : null">
+                <mat-autocomplete #productAutocomplete="matAutocomplete" [displayWith]="productDisplayFn">
+                  <mat-option *ngFor="let product of products" [value]="product">
+                    {{product.name}}
+                  </mat-option>
+                </mat-autocomplete>
+                <mat-spinner matSuffix *ngIf="products.loading"></mat-spinner>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Quantidade</mat-label>
+                <input matInput #phoneNumberField="ngModel" name="newQuantity" [(ngModel)]="newProduct.quantity"
+                       type="tel" [disabled]="loading">
+              </mat-form-field>
+            </div>
+            <div class="button">
+              <button mat-icon-button type="button" matSuffix
+                      (click)="info.products.push(newProduct); newProduct = {}; productSelected = undefined;"
+                      matTooltip="Adicionar produto" matTooltipPosition="above">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+        <mat-expansion-panel>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
               Transações
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <smart-list #phoneList [model]="info.transactions">
-            <smart-list-item *ngFor="let phone of phoneList.list; let i = index;">
-              <p>
-                <mat-form-field appearance="fill">
-                  <mat-label>Telefone</mat-label>
-                  <input matInput #phoneNumberField="ngModel" [name]="'phoneNumber' + i" [(ngModel)]="phone.number"
-                         type="text" maskPhone [disabled]="loading">
-                  <button mat-icon-button type="button" matSuffix class="show-on-hover"
-                          *ngIf="i < phoneList.list.length - 1" (click)="phoneList.remove(i);"
-                          matTooltip="Remover telefone" matTooltipPosition="above">
-                    <mat-icon>delete</mat-icon>
-                  </button>
-                </mat-form-field>
+          <mat-list>
+            <mat-list-item *ngFor="let transaction of info.transactions; let i = index">
+              <p matLine>
+                <span> {{transaction.type}} </span>
               </p>
-            </smart-list-item>
-          </smart-list>
+              <p matLine>
+                {{(transaction.val) | currency : 'R$'}}
+              </p>
+              <button mat-icon-button type="button" matSuffix
+                      (click)="transactionSelected = newProduct = info.transactions.splice(i, 1)[0]"
+                      matTooltip="Editar transação" matTooltipPosition="above">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button type="button" matSuffix (click)="info.transactions.splice(i, 1)"
+                      matTooltip="Remover transação" matTooltipPosition="above">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </mat-list-item>
+            <mat-list-item>
+              <p matLine>
+                <span style="font-weight: 500">Total</span>
+              </p>
+              <p matLine>
+                {{calcTransactionTotal() | currency : 'R$'}}
+              </p>
+            </mat-list-item>
+          </mat-list>
+          <div class="flex-container">
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Tipo</mat-label>
+                <mat-select name="newType" [(ngModel)]="newTransaction.type" [disabled]="loading">
+                  <mat-option *ngFor="let type of transactionTypes" [value]="type.id">
+                    {{type.name}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>Valor</mat-label>
+                <input matInput #phoneNumberField="ngModel" name="newValue"
+                       [(ngModel)]="newTransaction.val"
+                       type="text" currencyMask [options]="{ prefix: 'R$ ', suffix: '', thousands: '.', decimal: ',' }"
+                       [disabled]="loading">
+              </mat-form-field>
+            </div>
+            <div class="button">
+              <button mat-icon-button type="button" matSuffix
+                      (click)="info.transactions.push(newTransaction); newTransaction = {}; transactionSelected = undefined;"
+                      matTooltip="Adicionar transação" matTooltipPosition="above">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
     </div>
@@ -101,7 +209,10 @@
           </span>
     </mat-card>
 
-    <pre>{{info | json}}</pre>
+    <pre>info {{info | json}}</pre>
+    <pre>clientSelected {{clientSelected | json}}</pre>
+    <pre>newProduct {{newProduct | json}}</pre>
+    <pre>productSelected {{productSelected | json}}</pre>
   </form>
 </div>
 

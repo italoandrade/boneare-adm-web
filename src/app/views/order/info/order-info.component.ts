@@ -21,16 +21,42 @@ export class OrderInfoComponent implements OnInit {
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
 
   clients;
-  private clientSearchSubject = new Subject<string>();
   clientsSearchText;
   clientSelected;
+  products;
+  productsSearchText;
+  productSelected;
+  newProduct;
+  clientDisplayFn = (client) => {
+    this.info.client = client ? client.id : undefined;
+    return client ? client.name : undefined;
+  };
+  productDisplayFn = (product) => {
+    this.newProduct.id = product ? product.id : undefined;
+    this.newProduct.name = product ? product.name : undefined;
+    this.newProduct.price = product ? product.price : undefined;
+    return product ? product.name : undefined;
+  };
+  private clientSearchSubject = new Subject<string>();
+  private productSearchSubject = new Subject<string>();
+
+  transactionTypes;
+  newTransaction;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
     this.info = {
-      transactions: []
+      transactions: [],
+      products: []
     };
     this.clients = [];
+    this.products = [];
+    this.newProduct = {};
+    this.transactionTypes = [
+      {id: 1, name: 'Receita'},
+      {id: 2, name: 'Despesa'}
+    ];
+    this.newTransaction = {};
   }
 
   ngOnInit() {
@@ -46,6 +72,7 @@ export class OrderInfoComponent implements OnInit {
     }
 
     this.getClientsAutocomplete();
+    this.getProductsAutocomplete();
 
     if (id) {
       this.loading = true;
@@ -78,6 +105,15 @@ export class OrderInfoComponent implements OnInit {
         this.clientsSearchText = filter;
         this.clients = [];
         this.getClientsAutocomplete();
+      });
+
+    this.productSearchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged())
+      .subscribe(filter => {
+        this.productsSearchText = filter;
+        this.products = [];
+        this.getProductsAutocomplete();
       });
   }
 
@@ -166,9 +202,7 @@ export class OrderInfoComponent implements OnInit {
         })
         .subscribe(
           res => {
-            const selected = this.clients.selected;
             this.clients = [...this.clients, ...res];
-            this.clients.selected = selected;
             if (!res.length) {
               this.clients.ended = true;
             }
@@ -185,10 +219,35 @@ export class OrderInfoComponent implements OnInit {
     this.clientSearchSubject.next(filter);
   }
 
-  clientDisplayFn = (client) => {
-    this.info.client = client ? client.id : undefined;
-    return client ? client.name : undefined;
-  };
+  getProductsAutocomplete() {
+    if (!this.products.loading && !this.products.ended) {
+      this.products.loading = true;
+      this.apiService
+        .prep('product', 'findAutocomplete')
+        .call({
+          filter: this.productsSearchText,
+          unless: [...this.products.map(x => x.id), ...this.info.products.map(x => x.id)]
+        })
+        .subscribe(
+          res => {
+            this.products = [...this.products, ...res];
+            if (!res.length) {
+              this.products.ended = true;
+            }
+          },
+          () => {
+            console.log('error');
+          },
+          () => {
+            this.products.loading = false;
+          }
+        );
+    }
+  }
+
+  productAutocompleteFilter(filter) {
+    this.productSearchSubject.next(filter);
+  }
 
   subPanelScroll() {
     setTimeout(() => {
@@ -198,6 +257,7 @@ export class OrderInfoComponent implements OnInit {
           takeUntil(this.autocompleteTrigger.panelClosingActions)
         )
           .subscribe(x => {
+            console.log(x);
             if (x.scrollTop + x.clientHeight === x.scrollHeight) {
               this.getClientsAutocomplete();
             }
@@ -205,5 +265,24 @@ export class OrderInfoComponent implements OnInit {
       }
     });
   }
+
+  calcProductTotal() {
+    const array = this.info.products;
+    let total = 0;
+    for (let i = 0, _len = array.length; i < _len; i++) {
+      total += (array[i]['quantity'] * array[i]['price']);
+    }
+    return total;
+  }
+
+  calcTransactionTotal() {
+    const array = this.info.transactions;
+    let total = 0;
+    for (let i = 0, _len = array.length; i < _len; i++) {
+      total += (array[i]['val']);
+    }
+    return total;
+  }
 }
+
 
