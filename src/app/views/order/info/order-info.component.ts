@@ -1,9 +1,11 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {AppComponent} from '../../../app.component';
 import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ApiService} from '../../../core/services/api.service';
-import {MatSnackBar} from '@angular/material';
+import {MatAutocomplete, MatAutocompleteTrigger, MatSnackBar} from '@angular/material';
+import {fromEvent, Subject} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 
 @Component({
   selector: 'app-order-info',
@@ -15,9 +17,20 @@ export class OrderInfoComponent implements OnInit {
   info: any;
   loading: boolean;
 
+  @ViewChild(MatAutocomplete) autocompleteRef: MatAutocomplete;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger: MatAutocompleteTrigger;
+
+  clients;
+  private clientSearchSubject = new Subject<string>();
+  clientsSearchText;
+  clientSelected;
+
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
-    this.info = {};
+    this.info = {
+      transactions: []
+    };
+    this.clients = [];
   }
 
   ngOnInit() {
@@ -31,6 +44,8 @@ export class OrderInfoComponent implements OnInit {
     if (infoFromTable && +id === infoFromTable.id) {
       this.info = {...this.info, ...infoFromTable};
     }
+
+    this.getClientsAutocomplete();
 
     if (id) {
       this.loading = true;
@@ -55,6 +70,15 @@ export class OrderInfoComponent implements OnInit {
           }
         );
     }
+
+    this.clientSearchSubject.pipe(
+      debounceTime(400),
+      distinctUntilChanged())
+      .subscribe(filter => {
+        this.clientsSearchText = filter;
+        this.clients = [];
+        this.getClientsAutocomplete();
+      });
   }
 
   onSubmit(form) {
@@ -129,6 +153,57 @@ export class OrderInfoComponent implements OnInit {
           console.error(err);
         }
       );
+  }
+
+  getClientsAutocomplete() {
+    if (!this.clients.loading && !this.clients.ended) {
+      this.clients.loading = true;
+      this.apiService
+        .prep('client', 'findAutocomplete')
+        .call({
+          filter: this.clientsSearchText,
+          unless: this.clients.map(x => x.id)
+        })
+        .subscribe(
+          res => {
+            const selected = this.clients.selected;
+            this.clients = [...this.clients, ...res];
+            this.clients.selected = selected;
+            if (!res.length) {
+              this.clients.ended = true;
+            }
+          },
+          null,
+          () => {
+            this.clients.loading = false;
+          }
+        );
+    }
+  }
+
+  clientAutocompleteFilter(filter) {
+    this.clientSearchSubject.next(filter);
+  }
+
+  clientDisplayFn = (client) => {
+    this.info.client = client ? client.id : undefined;
+    return client ? client.name : undefined;
+  };
+
+  subPanelScroll() {
+    setTimeout(() => {
+      if (this.autocompleteRef && this.autocompleteTrigger && this.autocompleteRef.panel) {
+        fromEvent(this.autocompleteRef.panel.nativeElement, 'scroll').pipe(
+          map(x => this.autocompleteRef.panel.nativeElement),
+          takeUntil(this.autocompleteTrigger.panelClosingActions)
+        )
+          .subscribe(x => {
+            if (x.scrollTop + x.clientHeight === x.scrollHeight) {
+              this.getClientsAutocomplete();
+            }
+          });
+      }
+    });
   }
 }
 

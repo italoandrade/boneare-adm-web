@@ -70,3 +70,15 @@ mat-toolbar {
 mat-card.mat-elevation-z0 {
   background-color: transparent;
 }
+
+mat-spinner[matSuffix] {
+  width: 24px !important;
+  height: 24px !important;
+
+  ::ng-deep {
+    svg {
+      width: 24px !important;
+      height: 24px !important;
+    }
+  }
+}

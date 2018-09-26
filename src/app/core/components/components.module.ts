@@ -1,5 +1,6 @@
 import {NgModule} from '@angular/core';
 import {
+  MatAutocompleteModule,
   MatBadgeModule,
   MatButtonModule,
   MatCardModule,
@@ -49,6 +50,7 @@ const COMPONENT_MODULES = [
   MatExpansionModule,
   MatBadgeModule,
   MatSelectModule,
+  MatAutocompleteModule,
 
   CurrencyMaskModule
 ];
