@@ -91,6 +91,12 @@ mat-spinner[matSuffix] {
     margin-bottom: 8px;
     padding-bottom: 8px;
   }
+  &.break-line {
+    display: block;
+    border-bottom: 1px solid rgba(black, 0.25);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
 
   & > * {
     flex: 1;
@@ -119,4 +125,17 @@ smart-list-item:last-child .flex-container {
     margin-bottom: initial;
     padding-bottom: initial;
   }
+}
+
+mat-panel-title i.warn {
+  margin-left: 16px;
+  color: #f44336;
+}
+mat-panel-title i.hint {
+  margin-left: 16px;
+  color: rgba(0, 0, 0, 0.58);
+}
+
+mat-expansion-panel {
+  position: relative;
 }

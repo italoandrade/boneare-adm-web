@@ -28,10 +28,10 @@
         <mat-expansion-panel #expansionOne [expanded]="true">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              Informações <i
-              *ngIf="!expansionOne.expanded && nameField.dirty && nameField.touched && nameField.invalid">contém
-              campo
-              inválido</i>
+              Informações
+              <i class="warn" *ngIf="!expansionOne.expanded && nameField.touched && nameField.invalid">
+                contém campo inválido
+              </i>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <p>
@@ -227,7 +227,11 @@
           </span>
     </mat-card>
 
-    <pre>{{info | json}}</pre>
+    <pre>info {{info | json}}</pre>
+    <pre>expansionOne.expanded {{expansionOne.expanded | json}}</pre>
+    <pre>nameField.dirty {{nameField.dirty | json}}</pre>
+    <pre>nameField.touched {{nameField.touched | json}}</pre>
+    <pre>nameField.invalid {{nameField.invalid | json}}</pre>
   </form>
 </div>
 

@@ -30,7 +30,7 @@
           <mat-expansion-panel-header>
             <mat-panel-title>
               Pedido
-              <i *ngIf="!expansionOne.expanded && nameField.dirty && nameField.touched && nameField.invalid">
+              <i class="warn" *ngIf="!expansionOne.expanded && nameField.touched && nameField.invalid">
                 contém campo inválido
               </i>
             </mat-panel-title>
@@ -63,10 +63,13 @@
             </mat-form-field>
           </p>
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel #expansionTwo>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Produtos
+              <i class="hint" *ngIf="!expansionTwo.expanded && info.products.length">
+                {{calcProductTotal() | currency : 'R$'}}
+              </i>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-list>
@@ -88,7 +91,7 @@
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-list-item>
-            <mat-list-item>
+            <mat-list-item *ngIf="info.products.length">
               <p matLine>
                 <span style="font-weight: 500">Total</span>
               </p>
@@ -130,10 +133,13 @@
             </div>
           </div>
         </mat-expansion-panel>
-        <mat-expansion-panel>
+        <mat-expansion-panel #expansionThree>
           <mat-expansion-panel-header>
             <mat-panel-title>
               Transações
+              <i class="hint" *ngIf="!expansionThree.expanded && info.transactions.length">
+                {{calcTransactionTotal() | currency : 'R$'}}
+              </i>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <mat-list>
@@ -154,7 +160,7 @@
                 <mat-icon>delete</mat-icon>
               </button>
             </mat-list-item>
-            <mat-list-item>
+            <mat-list-item *ngIf="info.transactions.length">
               <p matLine>
                 <span style="font-weight: 500">Total</span>
               </p>
@@ -163,7 +169,7 @@
               </p>
             </mat-list-item>
           </mat-list>
-          <div class="flex-container">
+          <div class="flex-container" [class.break-line]="appComponent.navOpened">
             <div>
               <mat-form-field appearance="fill">
                 <mat-label>Tipo</mat-label>

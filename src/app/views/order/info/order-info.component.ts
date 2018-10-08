@@ -6,6 +6,7 @@ import {ApiService} from '../../../core/services/api.service';
 import {MatAutocomplete, MatAutocompleteTrigger, MatSnackBar} from '@angular/material';
 import {fromEvent, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
+import {elementClosest} from '../../../core/functions/closest.function';
 
 @Component({
   selector: 'app-order-info',
@@ -118,14 +119,7 @@ export class OrderInfoComponent implements OnInit {
   }
 
   onSubmit(form) {
-    Object.keys(form.controls).forEach(i => {
-      const input = form.controls[i];
-      input.markAsTouched();
-      if (input.invalid) {
-        const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
-        inputElement.focus();
-      }
-    });
+    this.validateForm(form);
 
     this.loading = true;
     if (form.invalid) {
@@ -138,7 +132,6 @@ export class OrderInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/order/', res.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
@@ -155,7 +148,6 @@ export class OrderInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/order']);
             this.snackBar.open(res.message, null, {
               duration: 3000
@@ -189,6 +181,27 @@ export class OrderInfoComponent implements OnInit {
           console.error(err);
         }
       );
+  }
+
+  validateForm(form) {
+    Object.keys(form.controls).forEach(i => {
+      const input = form.controls[i];
+      input.markAsTouched();
+      if (input.invalid) {
+        setTimeout(() => {
+          const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
+          const expansionPanel = elementClosest(inputElement, 'mat-expansion-panel');
+          if (expansionPanel && !expansionPanel.classList.contains('mat-expanded')) {
+            expansionPanel.querySelector('mat-expansion-panel-header').click();
+            setTimeout(() => {
+              inputElement.focus();
+            }, 200);
+          } else {
+            inputElement.focus();
+          }
+        });
+      }
+    });
   }
 
   getClientsAutocomplete() {
