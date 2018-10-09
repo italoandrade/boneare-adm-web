@@ -270,7 +270,6 @@ export class OrderInfoComponent implements OnInit {
           takeUntil(this.autocompleteTrigger.panelClosingActions)
         )
           .subscribe(x => {
-            console.log(x);
             if (x.scrollTop + x.clientHeight === x.scrollHeight) {
               this.getClientsAutocomplete();
             }
@@ -295,6 +294,29 @@ export class OrderInfoComponent implements OnInit {
       total += (array[i]['val']);
     }
     return total;
+  }
+
+  addNewProduct() {
+    if (!this.newTransaction.id || !this.newTransaction.val) {
+      this.snackBar.open('Preencha todos os campos para adicionar um novo produto no pedido', null, {
+        duration: 3000
+      });
+      return false;
+    }
+    this.info.products.push(this.newProduct);
+    this.newProduct = {};
+    this.productSelected = undefined;
+  }
+
+  addNewTransaction() {
+    if (!this.newTransaction.id || !this.newTransaction.val) {
+      this.snackBar.open('Preencha todos os campos para adicionar uma nova transação no pedido', null, {
+        duration: 3000
+      });
+      return false;
+    }
+    this.info.transactions.push(this.newTransaction);
+    this.newTransaction = {};
   }
 }
 

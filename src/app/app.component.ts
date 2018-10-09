@@ -15,7 +15,7 @@ export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private readonly _mobileQueryListener: () => void;
   navOpened: boolean;
-  @ViewChild('snav') snav;
+  @ViewChild('snav') public snav;
   title: string;
   user: any;
   readyToGo = false;
