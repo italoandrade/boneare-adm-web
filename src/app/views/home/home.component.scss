@@ -2,3 +2,11 @@
   display: block;
   padding: 16px;
 }
+
+.container {
+  display: flex;
+
+  mat-card {
+    margin: 4px;
+  }
+}
