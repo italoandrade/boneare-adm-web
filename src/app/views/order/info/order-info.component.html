@@ -30,19 +30,20 @@
           <mat-expansion-panel-header>
             <mat-panel-title>
               Pedido
-              <i class="warn" *ngIf="!expansionOne.expanded && nameField.touched && nameField.invalid">
+              <i class="warn" *ngIf="!expansionOne.expanded && descriptionField.touched && descriptionField.invalid">
                 contém campo inválido
               </i>
             </mat-panel-title>
           </mat-expansion-panel-header>
           <p>
             <mat-form-field appearance="fill">
-              <mat-label>Nome</mat-label>
-              <input matInput #nameField="ngModel" name="name" [(ngModel)]="info.name" type="text" required
-                     maxlength="100" [disabled]="loading">
-              <mat-hint align="end" *ngIf="info.name?.length >= 100">{{info.name?.length || 0}}/100</mat-hint>
-              <mat-error *ngIf="nameField.hasError('required')">
-                Preencha com o nome
+              <mat-label>Descrição</mat-label>
+              <input matInput #descriptionField="ngModel" name="description" [(ngModel)]="info.description" type="text"
+                     required maxlength="100" [disabled]="loading">
+              <mat-hint align="end" *ngIf="info.description?.length >= 100">{{info.description?.length || 0}}/100
+              </mat-hint>
+              <mat-error *ngIf="descriptionField.hasError('required')">
+                Preencha com a descrição
               </mat-error>
             </mat-form-field>
           </p>

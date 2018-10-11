@@ -13,7 +13,7 @@ import {fromEvent, merge} from 'rxjs';
 })
 
 export class OrderListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'name', 'client', 'totalCost'];
+  displayedColumns = ['id', 'description', 'client', 'totalCost'];
   dataSource: OrderListDataSource;
   totalLinesCount = null;
   totalCostAll = null;
