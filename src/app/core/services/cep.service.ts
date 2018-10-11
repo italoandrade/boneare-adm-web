@@ -10,14 +10,15 @@ export class CepService {
   constructor(private http: HttpClient, private snackBar: MatSnackBar) {
   }
 
-  searchCep(cep, numberFieldEl, cepFieldEl) {
+  searchCep(zipCode, numberFieldEl, cepFieldEl) {
     return new Observable((observer) => {
-      if (cep) {
+      if (zipCode) {
         this.loadingCep = true;
-        this.http.get(`https://viacep.com.br/ws/${cep}/json/`).subscribe(
+        this.http.get(`https://viacep.com.br/ws/${zipCode}/json/`).subscribe(
           (res: any) => {
             if (!res.erro) {
               observer.next({
+                zipCode: zipCode,
                 street: res.logradouro,
                 complement: res.complemento,
                 district: res.bairro,
