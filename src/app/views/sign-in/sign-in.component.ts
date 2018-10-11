@@ -29,7 +29,6 @@ export class SignInComponent implements OnInit {
     this.appComponent.title = 'Iniciar sessão';
 
     if (this.userService.user) {
-      // noinspection JSIgnoredPromiseFromCall
       this.router.navigate(['/']);
       setTimeout(() => {
         this.snackBar.open('Você já está com a sessão iniciada', null, {
@@ -52,7 +51,6 @@ export class SignInComponent implements OnInit {
         res => {
           this.userService.set(res.user);
           this.userService.setToken(res.token);
-          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/']);
         },
         err => {
@@ -72,6 +70,11 @@ export class SignInComponent implements OnInit {
                   });
                   form.controls['password'].setErrors({wrong: true});
                   break;
+              }
+              if (err.status === 500) {
+                this.snackBar.open('Ocorreu um erro interno. Tente novamente mais tarde.', null, {
+                  duration: 3000
+                });
               }
             } else {
               console.error(err);
