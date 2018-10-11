@@ -52,7 +52,6 @@ export class ClientInfoComponent implements OnInit {
             this.info = {...this.info, ...res};
           },
           err => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/client']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
@@ -60,9 +59,7 @@ export class ClientInfoComponent implements OnInit {
               });
             }
           },
-          () => {
-            this.loading = false;
-          }
+          () => this.loading = false
         );
     } else {
       this.loading = false;
@@ -70,10 +67,9 @@ export class ClientInfoComponent implements OnInit {
   }
 
   onSubmit(form) {
-    this.validateForm(form);
-
     this.loading = true;
 
+    this.validateForm(form);
     if (form.invalid) {
       return this.loading = false;
     }
@@ -84,14 +80,12 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/client/', res.returning.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
             });
           },
           err => {
-            console.log(err); // TODO: REMOVER
             this.loading = false;
             this.snackBar.open(err.error.message, null, {
               duration: 3000
@@ -104,7 +98,6 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/client']);
             this.snackBar.open(res.message, null, {
               duration: 3000
@@ -127,7 +120,6 @@ export class ClientInfoComponent implements OnInit {
       .call(this.info)
       .subscribe(
         res => {
-          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/client']);
           this.snackBar.open(res.message, null, {
             duration: 3000
@@ -159,6 +151,10 @@ export class ClientInfoComponent implements OnInit {
         });
       }
     });
+  }
+
+  searchCep(zipCode, numberFieldEl, zipCodeFieldEl) {
+    this.cepService.searchCep(zipCode, numberFieldEl, zipCodeFieldEl).subscribe(address => address ? this.info.address = address : null);
   }
 
   checkExpansionFourValid(expansion) {

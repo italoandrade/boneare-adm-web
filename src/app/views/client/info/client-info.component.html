@@ -80,7 +80,7 @@
               <input matInput #zipCodeFieldEl #zipCodeField="ngModel" name="zipCode" [(ngModel)]="info.address.zipCode"
                      type="tel" maskCep [disabled]="loading || cepService.loadingCep">
               <button mat-icon-button type="button" matSuffix
-                      (click)="this.info.address = cepService.searchCep(info.address.zipCode, numberFieldEl, zipCodeFieldEl)"
+                      (click)="searchCep(info.address.zipCode, numberFieldEl, zipCodeFieldEl)"
                       [disabled]="loading || cepService.loadingCep"
                       matTooltip="Buscar informações do endereço" matTooltipPosition="above">
                 <mat-icon>search</mat-icon>
