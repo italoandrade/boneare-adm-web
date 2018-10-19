@@ -1,12 +1,91 @@
+@import '~@angular/material/theming';
+
 :host {
   display: block;
-  padding: 16px;
+
+  @media (min-width: 601px) {
+    padding: 16px;
+  }
 }
 
 .container {
-  display: flex;
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  margin: 0 auto;
 
   mat-card {
-    margin: 4px;
+    position: relative;
+    //width: 100%;
+    display: block;
+    margin: 8px 0;
+
+    @media (max-width: 600px) {
+      border-radius: 0;
+    }
   }
 }
+
+.card-value {
+  font-size: 42px;
+
+  &.small {
+    font-size: 28px;
+  }
+}
+
+mat-card-title {
+  margin: 12px 0;
+}
+
+mat-card-content {
+  text-align: right;
+}
+
+.avatar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.yellow {
+  background-color: map_get($mat-yellow, 600);
+  color: map_get(map_get($mat-yellow, contrast), 600);
+
+  .avatar {
+    background-color: map_get(map_get($mat-yellow, contrast), 600);
+    color: map_get($mat-yellow, 600);
+  }
+}
+
+.green {
+  background-color: map_get($mat-green, 600);
+  color: map_get(map_get($mat-green, contrast), 600);
+
+  .avatar {
+    background-color: map_get(map_get($mat-green, contrast), 600);
+    color: map_get($mat-green, 600);
+  }
+}
+
+.red {
+  background-color: map_get($mat-red, 500);
+  color: map_get(map_get($mat-red, contrast), 500);
+
+  .avatar {
+    background-color: map_get(map_get($mat-red, contrast), 500);
+    color: map_get($mat-red, 500);
+  }
+}
+
+.blue {
+  background-color: map_get($mat-blue, 500);
+  color: map_get(map_get($mat-blue, contrast), 500);
+
+  .avatar {
+    background-color: map_get(map_get($mat-blue, contrast), 500);
+    color: map_get($mat-blue, 500);
+  }
+}
+
+

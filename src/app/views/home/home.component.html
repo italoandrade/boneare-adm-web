@@ -1,15 +1,29 @@
-<!--<p style="height: 1000px">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem fuga itaque obcaecati
-  possimus sed sequi ut,
-  voluptatibus! Architecto culpa cumque eligendi et, iusto nam nemo officiis tempore tenetur, voluptate
-  voluptates?</p>-->
-
-<div class="container">
-  <mat-card>
-    <mat-card-title>Clientes</mat-card-title>
-    <mat-card-content>100</mat-card-content>
+<div class="container" [class.drawer-open]="appComponent.snav.opened">
+  <mat-card class="yellow">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar">
+        <mat-icon>group</mat-icon>
+      </div>
+      <mat-card-title>Clientes</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-value">100</mat-card-content>
   </mat-card>
-  <mat-card>
-    <mat-card-title>Cliente</mat-card-title>
-    <mat-card-content>100</mat-card-content>
+  <mat-card [class.green]="1 > 0" [class.red]="1 <= 0">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar">
+        <mat-icon>attach_money</mat-icon>
+      </div>
+      <mat-card-title>Saldo</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-value">{{100 | currency : 'R$'}}</mat-card-content>
+  </mat-card>
+  <mat-card class="blue">
+    <mat-card-header>
+      <div mat-card-avatar class="avatar">
+        <mat-icon>local_shipping</mat-icon>
+      </div>
+      <mat-card-title>Estoque</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-value">100kg</mat-card-content>
   </mat-card>
 </div>
