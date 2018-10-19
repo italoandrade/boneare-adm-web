@@ -3,7 +3,7 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatButtonModule,
-  MatCardModule,
+  MatCardModule, MatCheckboxModule,
   MatDialogModule,
   MatExpansionModule,
   MatFormFieldModule,
@@ -51,6 +51,7 @@ const COMPONENT_MODULES = [
   MatBadgeModule,
   MatSelectModule,
   MatAutocompleteModule,
+  MatCheckboxModule,
 
   CurrencyMaskModule
 ];

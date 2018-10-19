@@ -1,29 +1,35 @@
 <div class="container" [class.drawer-open]="appComponent.snav.opened">
-  <mat-card class="yellow">
-    <mat-card-header>
-      <div mat-card-avatar class="avatar">
-        <mat-icon>group</mat-icon>
-      </div>
-      <mat-card-title>Clientes</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="card-value">100</mat-card-content>
-  </mat-card>
-  <mat-card [class.green]="1 > 0" [class.red]="1 <= 0">
-    <mat-card-header>
-      <div mat-card-avatar class="avatar">
-        <mat-icon>attach_money</mat-icon>
-      </div>
-      <mat-card-title>Saldo</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="card-value">{{100 | currency : 'R$'}}</mat-card-content>
-  </mat-card>
-  <mat-card class="blue">
-    <mat-card-header>
-      <div mat-card-avatar class="avatar">
-        <mat-icon>local_shipping</mat-icon>
-      </div>
-      <mat-card-title>Estoque</mat-card-title>
-    </mat-card-header>
-    <mat-card-content class="card-value">100kg</mat-card-content>
-  </mat-card>
+  <ng-container *ngIf="appComponent.user">
+    <mat-card class="yellow">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>group</mat-icon>
+        </div>
+        <mat-card-title>Clientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-value">{{dashboard.clients}}</mat-card-content>
+    </mat-card>
+    <mat-card [class.green]="dashboard.balance > 0" [class.red]="dashboard.balance <= 0">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>attach_money</mat-icon>
+        </div>
+        <mat-card-title>Saldo</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-value">{{dashboard.balance | currency : 'R$'}}</mat-card-content>
+    </mat-card>
+    <mat-card class="blue">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>local_shipping</mat-icon>
+        </div>
+        <mat-card-title>Estoque</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-value">{{dashboard.stock}}kg</mat-card-content>
+    </mat-card>
+  </ng-container>
+  <ng-container *ngIf="!appComponent.user">
+    <h4>Clique <a routerLink="/sign-in">aqui</a> para iniciar a sessão</h4>
+    <!--TODO: A not-logged dashboard-->
+  </ng-container>
 </div>
