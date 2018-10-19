@@ -18,11 +18,6 @@ export class SignInComponent implements OnInit {
 
   constructor(private appComponent: AppComponent, private apiService: ApiService, private userService: UserService,
               private snackBar: MatSnackBar, private router: Router) {
-    this.user = {
-      email: 'test@test.com',
-      password: 'test'
-    };
-    // REMOVE
   }
 
   ngOnInit() {
