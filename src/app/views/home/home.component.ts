@@ -22,21 +22,25 @@ export class HomeComponent implements OnInit {
     this.appComponent.title = '';
     if (!this.appComponent.user) {
       this.router.navigate(['/sign-in']);
+    } else {
+      this.apiService
+        .prep('dashboard', 'getInfo')
+        .call()
+        .subscribe(
+          res => {
+            this.dashboard = res;
+          },
+          err => {
+            if (err.error) {
+              this.snackBar.open(err.error.message, null, {
+                duration: 3000
+              });
+            } else {
+              console.error(err);
+            }
+          },
+          () => this.loading = false
+        );
     }
-
-    this.apiService
-      .prep('dashboard', 'getInfo')
-      .call()
-      .subscribe(
-        res => {
-          this.dashboard = res;
-        },
-        err => {
-          this.snackBar.open(err.error.message, null, {
-            duration: 3000
-          });
-        },
-        () => this.loading = false
-      );
   }
 }
