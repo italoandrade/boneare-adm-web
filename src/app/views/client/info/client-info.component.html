@@ -195,8 +195,11 @@
                 <mat-form-field appearance="fill">
                   <mat-label>E-mail</mat-label>
                   <input matInput #emailField="ngModel" [name]="'email' + i" [(ngModel)]="email.email"
-                         type="email" [disabled]="loading" [email]="true"
+                         type="email" [disabled]="loading" [email]="true" maxlength="255"
                          (blur)="checkExpansionFourValid(expansionFour)">
+                  <mat-hint align="end" *ngIf="email.email?.length >= 255">
+                    {{email.email?.length || 0}}/255
+                  </mat-hint>
                   <mat-error *ngIf="emailField.hasError('email')">
                     Preencha com um e-mail <strong>válido</strong>
                   </mat-error>
