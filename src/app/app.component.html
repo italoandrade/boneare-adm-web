@@ -43,49 +43,40 @@
                  class="mat-elevation-z4">
       <mat-progress-bar mode="indeterminate" *ngIf="loading"></mat-progress-bar>
       <mat-nav-list class="nav-list">
-        <a mat-list-item *ngIf="!loading && readyToGo && !user" routerLink="/sign-in" routerLinkActive="active"
-           (click)="mobileQuery.matches && snav.close()">
-          <mat-icon matListIcon>person</mat-icon>
-          <p matLine>Iniciar sessão</p>
+        <a mat-list-item routerLink="/" routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}" (click)="mobileQuery.matches && snav.close()">
+          <mat-icon matListIcon>home</mat-icon>
+          <span matLine>Início</span>
         </a>
-        <ng-container *ngIf="!loading && readyToGo && user">
-          <a mat-list-item routerLink="/" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}" (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>home</mat-icon>
-            <p matLine>Início</p>
-          </a>
-          <a mat-list-item routerLink="/client" routerLinkActive="active"
+        <ng-container *ngIf="!loading && readyToGo">
+          <a *ngIf="!user" mat-list-item routerLink="/sign-in" routerLinkActive="active"
              (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>group</mat-icon>
-            <p matLine>Clientes</p>
+            <mat-icon matListIcon>person</mat-icon>
+            <p matLine>Iniciar sessão</p>
           </a>
-          <a mat-list-item routerLink="/order" routerLinkActive="active"
-             (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>shopping_cart</mat-icon>
-            <p matLine>Pedidos</p>
-          </a>
-          <a mat-list-item routerLink="/product" routerLinkActive="active"
-             (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>
-              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path
-                  d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z"></path>
-              </svg>
-            </mat-icon>
-            <p matLine>Produtos</p>
-          </a>
-        </div>
-        <!--<div *ngIf="!loading && readyToGo && user">
-          <a mat-list-item routerLink="/stock" routerLinkActive="active"
-             (click)="mobileQuery.matches && snav.close()">
-            <mat-icon matListIcon>
-              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path d="M18,18.5A1.5,1.5 0 0,1 16.5,17A1.5,1.5 0 0,1 18,15.5A1.5,1.5 0 0,1 19.5,17A1.5,1.5 0 0,1 18,18.5M19.5,9.5L21.46,12H17V9.5M6,18.5A1.5,1.5 0 0,1 4.5,17A1.5,1.5 0 0,1 6,15.5A1.5,1.5 0 0,1 7.5,17A1.5,1.5 0 0,1 6,18.5M20,8H17V4H3C1.89,4 1,4.89 1,6V17H3A3,3 0 0,0 6,20A3,3 0 0,0 9,17H15A3,3 0 0,0 18,20A3,3 0 0,0 21,17H23V12L20,8Z"></path>
-              </svg>
-            </mat-icon>
-            <p matLine>Estoque</p>
-          </a>
-        </div>-->
+          <ng-container *ngIf="user">
+            <a mat-list-item routerLink="/client" routerLinkActive="active"
+               (click)="mobileQuery.matches && snav.close()">
+              <mat-icon matListIcon>group</mat-icon>
+              <span matLine>Clientes</span>
+            </a>
+            <a mat-list-item routerLink="/order" routerLinkActive="active"
+               (click)="mobileQuery.matches && snav.close()">
+              <mat-icon matListIcon>shopping_cart</mat-icon>
+              <span matLine>Pedidos</span>
+            </a>
+            <a mat-list-item routerLink="/product" routerLinkActive="active"
+               (click)="mobileQuery.matches && snav.close()">
+              <mat-icon matListIcon>
+                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                  <path
+                    d="M21,16.5C21,16.88 20.79,17.21 20.47,17.38L12.57,21.82C12.41,21.94 12.21,22 12,22C11.79,22 11.59,21.94 11.43,21.82L3.53,17.38C3.21,17.21 3,16.88 3,16.5V7.5C3,7.12 3.21,6.79 3.53,6.62L11.43,2.18C11.59,2.06 11.79,2 12,2C12.21,2 12.41,2.06 12.57,2.18L20.47,6.62C20.79,6.79 21,7.12 21,7.5V16.5M12,4.15L6.04,7.5L12,10.85L17.96,7.5L12,4.15M5,15.91L11,19.29V12.58L5,9.21V15.91M19,15.91V9.21L13,12.58V19.29L19,15.91Z"></path>
+                </svg>
+              </mat-icon>
+              <span matLine>Produtos</span>
+            </a>
+          </ng-container>
+        </ng-container>
       </mat-nav-list>
     </mat-sidenav>
 
