@@ -66,7 +66,7 @@ export class ApiService {
 
           let headers = new HttpHeaders();
           if (!apiMethod.public) {
-            headers = headers.set('Authentication', localStorage.getItem('RNB'));
+            headers = headers.set('Authorization', 'Bearer ' + localStorage.getItem('RNB'));
           }
           if (setHeaders) {
             Object.keys(setHeaders).forEach((key) => {

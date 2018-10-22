@@ -32,7 +32,7 @@ export class UserService {
     if (this.token) {
       this.apiService
         .prep('user', 'signIn')
-        .call(null, {'Authentication': this.token})
+        .call(null, {'Authorization': 'Bearer ' + this.token})
         .subscribe(
           res => {
             this.set(res.user);
