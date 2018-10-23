@@ -80,7 +80,7 @@ export class ClientInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            this.router.navigate(['/client/', res.returning.id]);
+            this.router.navigate(['/client/', res.return.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
             });
@@ -117,7 +117,9 @@ export class ClientInfoComponent implements OnInit {
     this.loading = true;
     this.apiService
       .prep('client', 'remove')
-      .call(this.info)
+      .call({
+        id: this.info.id
+      })
       .subscribe(
         res => {
           this.router.navigate(['/client']);
