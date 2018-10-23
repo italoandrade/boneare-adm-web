@@ -91,6 +91,11 @@ export class OrderInfoComponent implements OnInit {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
               });
+            } else {
+              this.snackBar.open('Não foi possível ver o pedido', null, {
+                duration: 3000
+              });
+              console.error(err);
             }
           },
           () => {
