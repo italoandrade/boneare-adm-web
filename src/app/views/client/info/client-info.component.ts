@@ -58,6 +58,11 @@ export class ClientInfoComponent implements OnInit {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
               });
+            } else {
+              this.snackBar.open('Não foi possível ver o cliente', null, {
+                duration: 3000
+              });
+              console.error(err);
             }
           },
           () => this.loading = false

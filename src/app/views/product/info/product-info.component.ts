@@ -48,6 +48,11 @@ export class ProductInfoComponent implements OnInit {
               this.snackBar.open(err.error.message, null, {
                 duration: 3000
               });
+            } else {
+              this.snackBar.open('Não foi possível ver o produto', null, {
+                duration: 3000
+              });
+              console.error(err);
             }
           },
           () => this.loading = false
