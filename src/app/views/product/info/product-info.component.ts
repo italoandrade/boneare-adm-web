@@ -4,6 +4,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {MediaMatcher} from '@angular/cdk/layout';
 import {ApiService} from '../../../core/services/api.service';
 import {MatSnackBar} from '@angular/material';
+import {CustomSnackbarComponent} from '../../../core/components/custom-snackbar/custom-snackbar.component';
 
 @Component({
   selector: 'app-product-info',
@@ -13,7 +14,7 @@ import {MatSnackBar} from '@angular/material';
 
 export class ProductInfoComponent implements OnInit {
   info: any;
-  loading: boolean;
+  loading = true;
 
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
@@ -22,6 +23,7 @@ export class ProductInfoComponent implements OnInit {
 
   ngOnInit() {
     this.appComponent.title = 'Produto';
+
     let infoFromTable: any = sessionStorage.getItem('info');
     try {
       infoFromTable = infoFromTable && JSON.parse(infoFromTable);
@@ -33,7 +35,6 @@ export class ProductInfoComponent implements OnInit {
     }
 
     if (id) {
-      this.loading = true;
       this.apiService
         .prep('product', 'findById')
         .call({id})
@@ -42,7 +43,6 @@ export class ProductInfoComponent implements OnInit {
             this.info = {...this.info, ...res};
           },
           err => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
@@ -50,24 +50,17 @@ export class ProductInfoComponent implements OnInit {
               });
             }
           },
-          () => {
-            this.loading = false;
-          }
+          () => this.loading = false
         );
+    } else {
+      this.loading = false;
     }
   }
 
   onSubmit(form) {
-    Object.keys(form.controls).forEach(i => {
-      const input = form.controls[i];
-      input.markAsTouched();
-      if (input.invalid) {
-        const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
-        inputElement.focus();
-      }
-    });
-
     this.loading = true;
+
+    this.validateForm(form);
     if (form.invalid) {
       return this.loading = false;
     }
@@ -78,7 +71,6 @@ export class ProductInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product/', res.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
@@ -95,7 +87,6 @@ export class ProductInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/product']);
             this.snackBar.open(res.message, null, {
               duration: 3000
@@ -115,10 +106,11 @@ export class ProductInfoComponent implements OnInit {
     this.loading = true;
     this.apiService
       .prep('product', 'remove')
-      .call(this.info)
+      .call({
+        id: this.info.id
+      })
       .subscribe(
         res => {
-          // noinspection JSIgnoredPromiseFromCall
           this.router.navigate(['/product']);
           this.snackBar.open(res.message, null, {
             duration: 3000
@@ -126,9 +118,28 @@ export class ProductInfoComponent implements OnInit {
         },
         err => {
           this.loading = false;
-          console.error(err);
+          if (err.status === 409) {
+            let relations = err.error.relations.map(i => `<a href="${i.url}" target="_blank">${i.relation}</a>`).join(', ');
+            this.snackBar.openFromComponent(CustomSnackbarComponent, {
+              duration: 10000,
+              data: `${err.error.message} com ${relations}`
+            });
+          } else {
+            console.error(err);
+          }
         }
       );
+  }
+
+  validateForm(form) {
+    Object.keys(form.controls).forEach(i => {
+      const input = form.controls[i];
+      input.markAsTouched();
+      if (input.invalid) {
+        const inputElement = (document.querySelector(`form input[name="${i}"]`) as HTMLElement);
+        inputElement.focus();
+      }
+    });
   }
 }
 
