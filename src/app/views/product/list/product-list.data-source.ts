@@ -5,7 +5,6 @@ import {CollectionViewer} from '@angular/cdk/collections';
 import {catchError, finalize} from 'rxjs/operators';
 
 export class ProductListDataSource implements DataSource<any> {
-
   public subject = new BehaviorSubject<any>([]);
   private loadingSubject = new BehaviorSubject<boolean>(false);
 

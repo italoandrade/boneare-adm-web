@@ -40,10 +40,10 @@
         <p>
           <mat-form-field appearance="fill">
             <mat-label>Peso da unidade</mat-label>
-            <input matInput #unitWeightField="ngModel" name="unitWeight" [(ngModel)]="info.unitWeight" type="text"
+            <input matInput #weightField="ngModel" name="weight" [(ngModel)]="info.weight" type="text"
                    required currencyMask [options]="{ prefix: '', suffix: 'kg', thousands: '.', decimal: ',' }"
                    placeholder="Em quilogramas" [disabled]="loading">
-            <mat-error *ngIf="unitWeightField.hasError('required')">
+            <mat-error *ngIf="weightField.hasError('required')">
               Preencha com o peso da unidade
             </mat-error>
           </mat-form-field>
@@ -75,8 +75,6 @@
             <span [title]="info.lastUpdateDate | date : 'full'">{{info.lastUpdateDate | date : 'medium'}}</span>
           </span>
     </mat-card>
-
-    <!--<pre>{{info | json}}</pre>-->
   </form>
 </div>
 
