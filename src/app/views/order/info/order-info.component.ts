@@ -29,7 +29,7 @@ export class OrderInfoComponent implements OnInit {
   productSelected;
   newProduct;
   clientDisplayFn = (client) => {
-    this.info.client = client ? client.id : undefined;
+    this.info.clientId = client ? client.id : undefined;
     return client ? client.name : undefined;
   };
   productDisplayFn = (product) => {
@@ -83,9 +83,9 @@ export class OrderInfoComponent implements OnInit {
         .subscribe(
           res => {
             this.info = {...this.info, ...res};
+            this.clientSelected = res.client;
           },
           err => {
-            // noinspection JSIgnoredPromiseFromCall
             this.router.navigate(['/order']);
             if (err.status === 404) {
               this.snackBar.open(err.error.message, null, {
