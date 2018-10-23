@@ -19,6 +19,7 @@ import {NotFoundComponent} from './views/not-found/not-found.component';
 import {SignInComponent} from './views/sign-in/sign-in.component';
 
 import {ApiUnavailableDialog} from './dialogs/api-unavailable.dialog';
+import {CustomSnackbarComponent} from './core/components/custom-snackbar/custom-snackbar.component';
 
 import {ClientModule} from './views/client/client.module';
 import {ProductModule} from './views/product/product.module';
@@ -51,7 +52,7 @@ import {OrderModule} from './views/order/order.module';
   ],
   providers: [ApiService, UserService, AuthGuard, ReverseAuthGuard],
   bootstrap: [AppComponent],
-  entryComponents: [ApiUnavailableDialog]
+  entryComponents: [ApiUnavailableDialog, CustomSnackbarComponent]
 })
 export class AppModule {
 }

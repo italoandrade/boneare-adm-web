@@ -28,6 +28,7 @@ import {SmartListItemComponent} from './smart-list/item/item.component';
 import {MaskCepDirective} from '../masks/cep/mask-cep.directive';
 import {DisplacerComponent, DisplacerPortalDirective} from '../utils/displacer';
 import {CurrencyMaskModule} from 'ng2-currency-mask';
+import {CustomSnackbarComponent} from './custom-snackbar/custom-snackbar.component';
 
 const COMPONENT_MODULES = [
   MatToolbarModule,
@@ -61,6 +62,7 @@ const COMPONENTS = [
   SmartListComponent,
   SmartListItemComponent,
   MaskCepDirective,
+  CustomSnackbarComponent,
 
   DisplacerComponent,
   DisplacerPortalDirective
