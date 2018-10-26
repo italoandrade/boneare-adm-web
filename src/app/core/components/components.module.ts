@@ -3,14 +3,14 @@ import {
   MatAutocompleteModule,
   MatBadgeModule,
   MatButtonModule,
-  MatCardModule, MatCheckboxModule,
+  MatCardModule, MatCheckboxModule, MatDatepickerModule,
   MatDialogModule,
   MatExpansionModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
   MatListModule,
-  MatMenuModule,
+  MatMenuModule, MatNativeDateModule,
   MatPaginatorModule,
   MatProgressBarModule,
   MatProgressSpinnerModule,
@@ -53,6 +53,8 @@ const COMPONENT_MODULES = [
   MatSelectModule,
   MatAutocompleteModule,
   MatCheckboxModule,
+  MatDatepickerModule,
+  MatNativeDateModule,
 
   CurrencyMaskModule
 ];

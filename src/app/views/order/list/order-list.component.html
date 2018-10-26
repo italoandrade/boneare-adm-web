@@ -38,8 +38,16 @@
 
     <ng-container matColumnDef="totalCost">
       <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-      <td mat-cell *matCellDef="let item">{{item.totalCost | currency : 'R$'}}</td>
+      <td mat-cell *matCellDef="let item">{{item.totalCost | currency : 'R$'}}
+      </td>
       <td mat-footer-cell *matFooterCellDef>{{totalCostAll | currency : 'R$'}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="totalPaid">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor pago</th>
+      <td mat-cell *matCellDef="let item">{{item.totalPaid | currency : 'R$'}}
+      </td>
+      <td mat-footer-cell *matFooterCellDef>{{totalPaidAll | currency : 'R$'}}</td>
     </ng-container>
 
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

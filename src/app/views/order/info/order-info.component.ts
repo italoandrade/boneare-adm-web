@@ -33,31 +33,31 @@ export class OrderInfoComponent implements OnInit {
     return client ? client.name : undefined;
   };
   productDisplayFn = (product) => {
-    this.newProduct.id = product ? product.id : undefined;
+    this.newProduct.productId = product ? product.id : undefined;
     this.newProduct.name = product ? product.name : undefined;
     this.newProduct.price = product ? product.price : undefined;
+    this.newProduct.weight = product ? product.weight : undefined;
     return product ? product.name : undefined;
   };
+  transactionTypes;
+  newTransaction;
   private clientSearchSubject = new Subject<string>();
   private productSearchSubject = new Subject<string>();
 
-  transactionTypes;
-  newTransaction;
-
   constructor(public appComponent: AppComponent, private route: ActivatedRoute, private changeDetectorRef: ChangeDetectorRef,
               private media: MediaMatcher, private apiService: ApiService, private router: Router, private snackBar: MatSnackBar) {
+    this.transactionTypes = [
+      {id: 1, name: 'Receita'},
+      {id: 2, name: 'Despesa'}
+    ];
     this.info = {
       transactions: [],
       products: []
     };
     this.clients = [];
     this.products = [];
-    this.newProduct = {};
-    this.transactionTypes = [
-      {id: 1, name: 'Receita'},
-      {id: 2, name: 'Despesa'}
-    ];
-    this.newTransaction = {};
+    this.newProduct = {entry: false};
+    this.newTransaction = {date: new Date()};
   }
 
   ngOnInit() {
@@ -137,7 +137,7 @@ export class OrderInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            this.router.navigate(['/order/', res.id]);
+            this.router.navigate(['/order/', res.return.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
             });
@@ -283,11 +283,17 @@ export class OrderInfoComponent implements OnInit {
     });
   }
 
-  calcProductTotal() {
+  calcProductTotal(type) {
     const array = this.info.products;
     let total = 0;
-    for (let i = 0, _len = array.length; i < _len; i++) {
-      total += (array[i]['quantity'] * array[i]['price']);
+    if (type === 'cost') {
+      for (let i = 0, _len = array.length; i < _len; i++) {
+        total += (array[i]['quantity'] * array[i]['price'] * (array[i]['entry'] ? -1 : 1));
+      }
+    } else {
+      for (let i = 0, _len = array.length; i < _len; i++) {
+        total += (array[i]['quantity'] * array[i]['weight'] * (array[i]['entry'] ? 1 : -1));
+      }
     }
     return total;
   }
@@ -296,32 +302,32 @@ export class OrderInfoComponent implements OnInit {
     const array = this.info.transactions;
     let total = 0;
     for (let i = 0, _len = array.length; i < _len; i++) {
-      total += (array[i]['val']);
+      total += (array[i]['amount'] * (array[i]['type']['id'] === 1 ? 1 : -1));
     }
     return total;
   }
 
   addNewProduct() {
-    if (!this.newTransaction.id || !this.newTransaction.val) {
+    if (!this.newProduct.productId || !this.newProduct.quantity) {
       this.snackBar.open('Preencha todos os campos para adicionar um novo produto no pedido', null, {
         duration: 3000
       });
       return false;
     }
     this.info.products.push(this.newProduct);
-    this.newProduct = {};
+    this.newProduct = {entry: false};
     this.productSelected = undefined;
   }
 
   addNewTransaction() {
-    if (!this.newTransaction.id || !this.newTransaction.val) {
+    if (!this.newTransaction.type || !this.newTransaction.amount || !this.newTransaction.date) {
       this.snackBar.open('Preencha todos os campos para adicionar uma nova transação no pedido', null, {
         duration: 3000
       });
       return false;
     }
     this.info.transactions.push(this.newTransaction);
-    this.newTransaction = {};
+    this.newTransaction = {date: new Date()};
   }
 }
 

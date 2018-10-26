@@ -104,6 +104,14 @@ mat-spinner[matSuffix] {
     flex: 1;
   }
 
+  &.flex25 {
+    & > * {
+      @media (min-width: 601px) {
+        width: 25%;
+      }
+    }
+  }
+
   & > div {
     padding-right: 8px;
     & > * {

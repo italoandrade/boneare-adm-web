@@ -13,10 +13,11 @@ import {fromEvent, merge} from 'rxjs';
 })
 
 export class OrderListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'description', 'client', 'totalCost'];
+  displayedColumns = ['id', 'description', 'client', 'totalCost', 'totalPaid'];
   dataSource: OrderListDataSource;
   totalLinesCount = null;
   totalCostAll = null;
+  totalPaidAll = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -33,6 +34,7 @@ export class OrderListComponent implements OnInit, AfterViewInit {
       if (items) {
         this.totalLinesCount = items.length && (items[0].lineCount || 0);
         this.totalCostAll = items.length && (items[0].totalCostAll || 0);
+        this.totalPaidAll = items.length && (items[0].totalPaidAll || 0);
       } else {
         this.totalLinesCount = null;
       }
