@@ -63,6 +63,10 @@ mat-card-content {
     background-color: map_get(map_get($mat-yellow, contrast), 600);
     color: map_get($mat-yellow, 600);
   }
+
+  ::ng-deep circle {
+    stroke: map_get(map_get($mat-yellow, contrast), 600) !important;
+  }
 }
 
 .green {
@@ -72,6 +76,10 @@ mat-card-content {
   .avatar {
     background-color: map_get(map_get($mat-green, contrast), 600);
     color: map_get($mat-green, 600);
+  }
+
+  ::ng-deep circle {
+    stroke: map_get(map_get($mat-green, contrast), 600) !important;
   }
 }
 
@@ -83,6 +91,10 @@ mat-card-content {
     background-color: map_get(map_get($mat-red, contrast), 500);
     color: map_get($mat-red, 500);
   }
+
+  ::ng-deep circle {
+    stroke: map_get(map_get($mat-red, contrast), 500) !important;
+  }
 }
 
 .blue {
@@ -93,6 +105,38 @@ mat-card-content {
     background-color: map_get(map_get($mat-blue, contrast), 500);
     color: map_get($mat-blue, 500);
   }
+
+  ::ng-deep circle {
+    stroke: map_get(map_get($mat-blue, contrast), 500) !important;
+  }
 }
 
+.orange {
+  background-color: map_get($mat-orange, 500);
+  color: map_get(map_get($mat-orange, contrast), 500);
 
+  .avatar {
+    background-color: map_get(map_get($mat-orange, contrast), 500);
+    color: map_get($mat-orange, 500);
+  }
+
+  ::ng-deep circle {
+    stroke: map_get(map_get($mat-orange, contrast), 500) !important;
+  }
+}
+
+.dashboard-loading {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 32px !important;
+  height: 32px !important;
+  &::before {
+    content: ' ';
+  }
+
+  ::ng-deep svg {
+    width: 32px !important;
+    height: 32px !important;
+  }
+}

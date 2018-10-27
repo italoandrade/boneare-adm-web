@@ -1,14 +1,5 @@
 <div class="container" [class.drawer-open]="appComponent.snav.opened">
   <ng-container *ngIf="appComponent.user">
-    <mat-card class="yellow">
-      <mat-card-header>
-        <div mat-card-avatar class="avatar">
-          <mat-icon>group</mat-icon>
-        </div>
-        <mat-card-title>Clientes</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="card-value">{{dashboard.clients}}</mat-card-content>
-    </mat-card>
     <mat-card [class.green]="dashboard.balance > 0" [class.red]="dashboard.balance <= 0">
       <mat-card-header>
         <div mat-card-avatar class="avatar">
@@ -16,7 +7,22 @@
         </div>
         <mat-card-title>Saldo</mat-card-title>
       </mat-card-header>
-      <mat-card-content class="card-value">{{dashboard.balance | currency : 'R$'}}</mat-card-content>
+      <mat-card-content class="card-value">
+        <mat-spinner class="dashboard-loading" *ngIf="loading"></mat-spinner>
+        {{dashboard.balance | currency : 'R$'}}
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="orange">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>receipt</mat-icon>
+        </div>
+        <mat-card-title>A receber</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-value">
+        <mat-spinner class="dashboard-loading" *ngIf="loading"></mat-spinner>
+        {{dashboard.toReceive | currency : 'R$'}}
+      </mat-card-content>
     </mat-card>
     <mat-card class="blue">
       <mat-card-header>
@@ -25,7 +31,22 @@
         </div>
         <mat-card-title>Estoque</mat-card-title>
       </mat-card-header>
-      <mat-card-content class="card-value">{{dashboard.stock}}kg</mat-card-content>
+      <mat-card-content class="card-value">
+        <mat-spinner class="dashboard-loading" *ngIf="loading"></mat-spinner>
+        {{!loading ? dashboard.stock + 'kg' : ''}}
+      </mat-card-content>
+    </mat-card>
+    <mat-card class="yellow">
+      <mat-card-header>
+        <div mat-card-avatar class="avatar">
+          <mat-icon>group</mat-icon>
+        </div>
+        <mat-card-title>Clientes</mat-card-title>
+      </mat-card-header>
+      <mat-card-content class="card-value">
+        <mat-spinner class="dashboard-loading" *ngIf="loading"></mat-spinner>
+        {{dashboard.clients}}
+      </mat-card-content>
     </mat-card>
   </ng-container>
   <ng-container *ngIf="!appComponent.user">
