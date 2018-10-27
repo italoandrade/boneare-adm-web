@@ -3,7 +3,7 @@ import {Pipe, PipeTransform} from '@angular/core';
 @Pipe({
   name: 'cep'
 })
-export class UiCepPipe implements PipeTransform {
+export class CepPipe implements PipeTransform {
 
   transform(value: any, args?: any): any {
     if (!value) {

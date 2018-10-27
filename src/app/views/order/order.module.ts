@@ -1,6 +1,6 @@
 import {CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, NgModule} from '@angular/core';
 import {OrderListComponent} from './list/order-list.component';
-import {ComponentsModule} from '../../core/components/components.module';
+import {ComponentsModule} from '../../core/components.module';
 import {RouterModule} from '@angular/router';
 import {MatPaginatorIntl} from '@angular/material';
 import {MatPaginatorIntlBra} from '../../core/utils/matPaginatorIntlBra';

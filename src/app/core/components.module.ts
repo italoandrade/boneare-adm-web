@@ -22,13 +22,15 @@ import {
   MatToolbarModule,
   MatTooltipModule
 } from '@angular/material';
-import {MaskPhoneDirective} from '../masks/phone/mask-phone.directive';
-import {SmartListComponent} from './smart-list/smart-list.component';
-import {SmartListItemComponent} from './smart-list/item/item.component';
-import {MaskCepDirective} from '../masks/cep/mask-cep.directive';
-import {DisplacerComponent, DisplacerPortalDirective} from '../utils/displacer';
+import {MaskPhoneDirective} from './masks/phone/mask-phone.directive';
+import {SmartListComponent} from './components/smart-list/smart-list.component';
+import {SmartListItemComponent} from './components/smart-list/item/item.component';
+import {MaskCepDirective} from './masks/cep/mask-cep.directive';
+import {DisplacerComponent, DisplacerPortalDirective} from './utils/displacer';
 import {CurrencyMaskModule} from 'ng2-currency-mask';
-import {CustomSnackbarComponent} from './custom-snackbar/custom-snackbar.component';
+import {CustomSnackbarComponent} from './components/custom-snackbar/custom-snackbar.component';
+import {PhonePipe} from './masks/phone/phone.pipe';
+import {CepPipe} from './masks/cep/cep.pipe';
 
 const COMPONENT_MODULES = [
   MatToolbarModule,
@@ -65,6 +67,8 @@ const COMPONENTS = [
   SmartListItemComponent,
   MaskCepDirective,
   CustomSnackbarComponent,
+  PhonePipe,
+  CepPipe,
 
   DisplacerComponent,
   DisplacerPortalDirective

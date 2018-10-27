@@ -12,7 +12,7 @@ import {AuthGuard, ReverseAuthGuard} from './core/services/auth.guard';
 import {ApiService} from './core/services/api.service';
 import {UserService} from './core/services/user.service';
 
-import {ComponentsModule} from './core/components/components.module';
+import {ComponentsModule} from './core/components.module';
 
 import {HomeComponent} from './views/home/home.component';
 import {NotFoundComponent} from './views/not-found/not-found.component';

@@ -1,6 +1,6 @@
 import {Directive, ElementRef, EventEmitter, forwardRef, HostListener, Input, Output, AfterViewInit, OnChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, NG_VALIDATORS, NG_VALUE_ACCESSOR, Validator} from '@angular/forms';
-import {UiCepPipe} from './cep.pipe';
+import {CepPipe} from './cep.pipe';
 import {getCaretPosition, setCaretPosition} from '../../functions/caret-position.functions';
 
 @Directive({
@@ -13,7 +13,7 @@ import {getCaretPosition, setCaretPosition} from '../../functions/caret-position
     provide: NG_VALIDATORS,
     useExisting: forwardRef(() => MaskCepDirective),
     multi: true
-  }, UiCepPipe]
+  }, CepPipe]
 })
 export class MaskCepDirective implements ControlValueAccessor, Validator, AfterViewInit, OnChanges {
 
@@ -27,7 +27,7 @@ export class MaskCepDirective implements ControlValueAccessor, Validator, AfterV
   @Input() ngModel: any;
   @Output() ngModelChange: EventEmitter<any> = new EventEmitter();
 
-  constructor(public elementRef: ElementRef, public cepPipe: UiCepPipe) {
+  constructor(public elementRef: ElementRef, public cepPipe: CepPipe) {
   }
 
   ngOnChanges(changes): void {
