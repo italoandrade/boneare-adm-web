@@ -194,7 +194,7 @@
               <mat-form-field appearance="fill">
                 <mat-label>Tipo</mat-label>
                 <mat-select name="newType" [(ngModel)]="newTransaction.typeId" [disabled]="loading"
-                            (selectionChange)="selectTransactionType($event)">
+                            (selectionChange)="selectTransactionType($event)" name="newType">
                   <mat-option *ngFor="let type of transactionTypes" [value]="type.id">
                     {{type.name}}
                   </mat-option>
@@ -246,11 +246,11 @@
           </span>
     </mat-card>
 
-    <pre>info {{info | json}}</pre>
+    <!--<pre>info {{info | json}}</pre>
     <pre>clientSelected {{clientSelected | json}}</pre>
     <pre>newProduct {{newProduct | json}}</pre>
     <pre>productSelected {{productSelected | json}}</pre>
-    <pre>newTransaction {{newTransaction | json}}</pre>
+    <pre>newTransaction {{newTransaction | json}}</pre>-->
   </form>
 </div>
 

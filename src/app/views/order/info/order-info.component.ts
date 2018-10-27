@@ -253,8 +253,11 @@ export class OrderInfoComponent implements OnInit {
               this.products.ended = true;
             }
           },
-          () => {
-            console.log('error');
+          error => {
+            this.snackBar.open('Não foi possível carregar a lista de produtos', null, {
+              duration: 3000
+            });
+            console.error(error);
           },
           () => {
             this.products.loading = false;
