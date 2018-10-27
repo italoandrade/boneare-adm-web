@@ -76,7 +76,7 @@ export class ProductInfoComponent implements OnInit {
         .call(this.info)
         .subscribe(
           res => {
-            this.router.navigate(['/product/', res.id]);
+            this.router.navigate(['/product/', res.return.id]);
             this.snackBar.open(res.message, null, {
               duration: 3000
             });

@@ -50,6 +50,14 @@
       <td mat-footer-cell *matFooterCellDef>{{totalPaidAll | currency : 'R$'}}</td>
     </ng-container>
 
+    <ng-container matColumnDef="totalWeight">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Peso</th>
+      <td mat-cell *matCellDef="let item">
+        {{item.totalWeight | number}}kg
+      </td>
+      <td mat-footer-cell *matFooterCellDef>{{totalWeightAll | number}}kg</td>
+    </ng-container>
+
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns"
         (click)="onRowClicked(row)" [routerLink]="['/order', row.id]">

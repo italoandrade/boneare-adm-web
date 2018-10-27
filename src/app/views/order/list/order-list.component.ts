@@ -13,11 +13,12 @@ import {fromEvent, merge} from 'rxjs';
 })
 
 export class OrderListComponent implements OnInit, AfterViewInit {
-  displayedColumns = ['id', 'description', 'client', 'totalCost', 'totalPaid'];
+  displayedColumns = ['id', 'description', 'client', 'totalCost', 'totalPaid', 'totalWeight'];
   dataSource: OrderListDataSource;
   totalLinesCount = null;
   totalCostAll = null;
   totalPaidAll = null;
+  totalWeightAll = null;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -35,6 +36,7 @@ export class OrderListComponent implements OnInit, AfterViewInit {
         this.totalLinesCount = items.length && (items[0].lineCount || 0);
         this.totalCostAll = items.length && (items[0].totalCostAll || 0);
         this.totalPaidAll = items.length && (items[0].totalPaidAll || 0);
+        this.totalWeightAll = items.length && (items[0].totalWeightAll || 0);
       } else {
         this.totalLinesCount = null;
       }
@@ -73,5 +75,5 @@ export class OrderListComponent implements OnInit, AfterViewInit {
 
   onRowClicked = (row) => {
     sessionStorage.setItem('info', JSON.stringify(row));
-  }
+  };
 }
