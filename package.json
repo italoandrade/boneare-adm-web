@@ -4,13 +4,14 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --host 0.0.0.0 --disable-host-check",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "build": "ng build --prod"
   },
   "private": true,
   "dependencies": {
+    "compression": "^1.7.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
     "@angular/animations": "^6.1.7",
     "@angular/cdk": "^6.4.7",
     "@angular/common": "^6.1.0",
@@ -27,9 +28,7 @@
     "ng2-currency-mask": "^5.3.1",
     "ngx-textarea-autosize": "^2.0.0",
     "rxjs": "~6.2.0",
-    "zone.js": "~0.8.26"
-  },
-  "devDependencies": {
+    "zone.js": "~0.8.26",
     "@angular-devkit/build-angular": "~0.8.0",
     "@angular/cli": "~6.2.1",
     "@angular/compiler-cli": "^6.1.0",

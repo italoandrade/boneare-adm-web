@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, OnDestroy {
   readyToGo = false;
   loading = true;
   isColorBright = isColorBright;
+  iphoneApp = false;
 
   constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private apiService: ApiService,
               private userService: UserService, private router: Router) {
@@ -46,6 +47,10 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     );
     this.userService.userChange.subscribe(user => this.user = user);
+
+    if (window.navigator['standalone']) {
+      this.iphoneApp = true;
+    }
   }
 
   ngOnInit() {

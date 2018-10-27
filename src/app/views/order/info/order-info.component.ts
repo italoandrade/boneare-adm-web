@@ -288,7 +288,7 @@ export class OrderInfoComponent implements OnInit {
     let total = 0;
     if (type === 'cost') {
       for (let i = 0, _len = array.length; i < _len; i++) {
-        total += (array[i]['quantity'] * array[i]['price'] * (array[i]['entry'] ? -1 : 1));
+        total += (array[i]['quantity'] * array[i]['price'] * (array[i]['entry'] ? 0 : 1));
       }
     } else {
       for (let i = 0, _len = array.length; i < _len; i++) {
@@ -328,6 +328,10 @@ export class OrderInfoComponent implements OnInit {
     }
     this.info.transactions.push(this.newTransaction);
     this.newTransaction = {date: new Date()};
+  }
+
+  selectTransactionType($event) {
+    console.log($event);
   }
 }
 

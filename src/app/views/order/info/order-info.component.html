@@ -30,21 +30,31 @@
           <mat-expansion-panel-header>
             <mat-panel-title>
               Pedido
-              <i class="warn" *ngIf="!expansionOne.expanded && descriptionField.touched && descriptionField.invalid">
+              <!--<i class="warn" *ngIf="!expansionOne.expanded && descriptionField.touched && descriptionField.invalid">
                 contém campo inválido
-              </i>
+              </i>-->
             </mat-panel-title>
           </mat-expansion-panel-header>
           <p>
             <mat-form-field appearance="fill">
               <mat-label>Descrição</mat-label>
               <input matInput #descriptionField="ngModel" name="description" [(ngModel)]="info.description" type="text"
-                     required maxlength="100" [disabled]="loading">
+                     maxlength="100" [disabled]="loading">
               <mat-hint align="end" *ngIf="info.description?.length >= 100">{{info.description?.length || 0}}/100
               </mat-hint>
-              <mat-error *ngIf="descriptionField.hasError('required')">
+              <!--<mat-error *ngIf="descriptionField.hasError('required')">
                 Preencha com a descrição
-              </mat-error>
+              </mat-error>-->
+            </mat-form-field>
+          </p>
+          <p>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Data</mat-label>
+              <input matInput #dateField="ngModel" name="date" [(ngModel)]="info.date"
+                     [matDatepicker]="datePicker" [disabled]="loading">
+              <mat-datepicker-toggle matSuffix [for]="datePicker" [disabled]="loading"></mat-datepicker-toggle>
+              <mat-datepicker #datePicker></mat-datepicker>
             </mat-form-field>
           </p>
           <p>
@@ -54,7 +64,7 @@
                      placeholder="Escolha um cliente"
                      [(ngModel)]="clientSelected" [matAutocomplete]="clientAutocomplete"
                      (keyup)="clientAutocompleteFilter(clientFieldEl.value)" (focus)="subPanelScroll()"
-                     (blur)="clientSelected == clientFieldEl.value ? info.client = clientSelected = undefined : null">
+                     (blur)="clientSelected == clientFieldEl.value ? info.client = clientSelected = undefined : null" [disabled]="loading">
               <mat-autocomplete #clientAutocomplete="matAutocomplete" [displayWith]="clientDisplayFn">
                 <mat-option *ngFor="let client of clients" [value]="client">
                   {{client.name}}
@@ -69,7 +79,7 @@
             <mat-panel-title>
               Produtos
               <i class="hint" *ngIf="!expansionTwo.expanded && info.products.length">
-                {{calcProductTotal('cost') | currency : 'R$'}}
+                {{calcProductTotal('cost') | currency : 'R$'}} ({{calcProductTotal('weight') | number}}kg)
               </i>
             </mat-panel-title>
           </mat-expansion-panel-header>
@@ -80,8 +90,12 @@
                 <span> x{{product.quantity}} </span>
                 <span *ngIf="product.entry"> (Entrada) </span>
               </p>
-              <p matLine>
-                {{(product.quantity * product.price) | currency : 'R$'}} ({{(product.quantity * product.weight * (product.entry ? 1 : -1)) | number}}kg)
+              <p matLine *ngIf="!product.entry">
+                {{(product.quantity * product.price) | currency : 'R$'}} ({{(product.quantity * product.weight *
+                (product.entry ? 1 : -1)) | number}}kg)
+              </p>
+              <p matLine *ngIf="product.entry">
+                {{(product.quantity * product.weight * (product.entry ? 1 : -1)) | number}}kg
               </p>
               <button mat-icon-button type="button" matSuffix
                       (click)="productSelected = newProduct = info.products.splice(i, 1)[0]"
@@ -110,7 +124,8 @@
                        placeholder="Escolha um produto"
                        [(ngModel)]="productSelected" [matAutocomplete]="productAutocomplete"
                        (keyup)="productAutocompleteFilter(productFieldEl.value)" (focus)="subPanelScroll()"
-                       (blur)="productSelected == productFieldEl.value ? productSelected = undefined : null">
+                       (blur)="productSelected == productFieldEl.value ? productSelected = undefined : null"
+                       [disabled]="loading">
                 <mat-autocomplete #productAutocomplete="matAutocomplete" [displayWith]="productDisplayFn">
                   <mat-option *ngFor="let product of products" [value]="product">
                     {{product.name}}
@@ -156,7 +171,7 @@
                 {{(transaction.amount) | currency : 'R$'}}
               </p>
               <button mat-icon-button type="button" matSuffix
-                      (click)="newProduct = info.transactions.splice(i, 1)[0]"
+                      (click)="newTransaction = info.transactions.splice(i, 1)[0]"
                       matTooltip="Editar transação" matTooltipPosition="above">
                 <mat-icon>edit</mat-icon>
               </button>
@@ -178,8 +193,9 @@
             <div>
               <mat-form-field appearance="fill">
                 <mat-label>Tipo</mat-label>
-                <mat-select name="newType" [(ngModel)]="newTransaction.type" [disabled]="loading">
-                  <mat-option *ngFor="let type of transactionTypes" [value]="type">
+                <mat-select name="newType" [(ngModel)]="newTransaction.typeId" [disabled]="loading"
+                            (selectionChange)="selectTransactionType($event)">
+                  <mat-option *ngFor="let type of transactionTypes" [value]="type.id">
                     {{type.name}}
                   </mat-option>
                 </mat-select>
@@ -188,10 +204,11 @@
             <div>
               <mat-form-field appearance="fill">
                 <mat-label>Data</mat-label>
-                <input matInput #dateField="ngModel" name="newDate" [(ngModel)]="newTransaction.date"
-                       [matDatepicker]="picker">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+                <input matInput #transactionDateField="ngModel" name="newDate" [(ngModel)]="newTransaction.date"
+                       [matDatepicker]="transactionDatePicker" [disabled]="loading">
+                <mat-datepicker-toggle matSuffix [for]="transactionDatePicker"
+                                       [disabled]="loading"></mat-datepicker-toggle>
+                <mat-datepicker #transactionDatePicker></mat-datepicker>
               </mat-form-field>
             </div>
             <div>

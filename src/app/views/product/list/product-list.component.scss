@@ -42,3 +42,19 @@ mat-progress-bar {
 .fab-container-space {
   height: 86px;
 }
+
+.mat-cell {
+  white-space: nowrap;
+}
+
+.mat-cell, .mat-header-cell, .mat-footer-cell {
+  &:not(:first-child):not(:last-child) {
+    padding: 0 8px;
+  }
+  &:first-child {
+    padding-right: 8px;
+  }
+  &:last-child {
+    padding-left: 8px;
+  }
+}

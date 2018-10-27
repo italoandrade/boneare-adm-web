@@ -13,7 +13,7 @@
 
   <table mat-table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="id">
+    <ng-container matColumnDef="id" sticky>
       <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 38px">#</th>
       <td mat-cell *matCellDef="let item">{{item.id}}</td>
     </ng-container>

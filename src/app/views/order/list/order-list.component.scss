@@ -4,6 +4,9 @@ table {
 
 .table {
   position: relative;
+  .container {
+    overflow: auto;
+  }
 }
 
 :host {
@@ -45,4 +48,20 @@ mat-progress-bar {
 
 tr.mat-footer-row {
   font-weight: bold;
+}
+
+.mat-cell {
+  white-space: nowrap;
+}
+
+.mat-cell, .mat-header-cell, .mat-footer-cell {
+  &:not(:first-child):not(:last-child) {
+    padding: 0 8px;
+  }
+  &:first-child {
+    padding-right: 8px;
+  }
+  &:last-child {
+    padding-left: 8px;
+  }
 }

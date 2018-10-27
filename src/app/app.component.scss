@@ -17,6 +17,19 @@
   /* Make sure the toolbar will stay on top of the content as it scrolls past. */
 }
 
+.iphone-app ::ng-deep {
+  .toolbar {
+    padding-top: 20px;
+    height: 76px;
+  }
+  .sidenav-container {
+    margin-top: 76px !important;
+  }
+  .mat-sidenav {
+    top: 76px !important;
+  }
+}
+
 h1.app-name {
   margin-left: 16px;
   font-weight: 400;

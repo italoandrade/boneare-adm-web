@@ -12,58 +12,60 @@
     </mat-form-field>
   </div>
 
-  <table mat-table [dataSource]="dataSource" matSort>
+  <div class="container">
+    <table mat-table [dataSource]="dataSource" matSort>
 
-    <ng-container matColumnDef="id">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 38px">#</th>
-      <td mat-cell *matCellDef="let item">{{item.id}}</td>
-      <td mat-footer-cell *matFooterCellDef>Total</td>
-    </ng-container>
+      <ng-container matColumnDef="id" sticky>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width: 38px">#</th>
+        <td mat-cell *matCellDef="let item" data-label="#">{{item.id}}</td>
+        <td mat-footer-cell *matFooterCellDef>Total</td>
+      </ng-container>
 
-    <ng-container matColumnDef="description">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
-      <td mat-cell class="description-cell"
-          *matCellDef="let item">{{item.description}}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="description">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Descrição</th>
+        <td mat-cell *matCellDef="let item" data-label="Descrição">{{item.description}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="client">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
-      <td mat-cell class="description-cell"
-          *matCellDef="let item">{{item.client}}
-      </td>
-      <td mat-footer-cell *matFooterCellDef></td>
-    </ng-container>
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Data</th>
+        <td mat-cell *matCellDef="let item" data-label="Data">{{item.date | date : 'dd/MM/yyyy'}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="totalCost">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
-      <td mat-cell *matCellDef="let item">{{item.totalCost | currency : 'R$'}}
-      </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalCostAll | currency : 'R$'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="client">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Cliente</th>
+        <td mat-cell *matCellDef="let item" data-label="Cliente">{{item.client}}</td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
 
-    <ng-container matColumnDef="totalPaid">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor pago</th>
-      <td mat-cell *matCellDef="let item">{{item.totalPaid | currency : 'R$'}}
-      </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalPaidAll | currency : 'R$'}}</td>
-    </ng-container>
+      <ng-container matColumnDef="totalCost">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor</th>
+        <td mat-cell *matCellDef="let item" data-label="Valor">{{item.totalCost | currency : 'R$'}}</td>
+        <td mat-footer-cell *matFooterCellDef>{{totalCostAll | currency : 'R$'}}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="totalWeight">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Peso</th>
-      <td mat-cell *matCellDef="let item">
-        {{item.totalWeight | number}}kg
-      </td>
-      <td mat-footer-cell *matFooterCellDef>{{totalWeightAll | number}}kg</td>
-    </ng-container>
+      <ng-container matColumnDef="totalPaid">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Valor pago</th>
+        <td mat-cell *matCellDef="let item" data-label="Valor pago">{{item.totalPaid | currency : 'R$'}}</td>
+        <td mat-footer-cell *matFooterCellDef>{{totalPaidAll | currency : 'R$'}}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"
-        (click)="onRowClicked(row)" [routerLink]="['/order', row.id]">
-    </tr>
-    <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
-  </table>
+      <ng-container matColumnDef="totalWeight">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Peso</th>
+        <td mat-cell *matCellDef="let item" data-label="Peso">
+          {{item.totalWeight | number}}{{item.totalWeight ? 'kg' : ''}}
+        </td>
+        <td mat-footer-cell *matFooterCellDef>{{totalWeightAll | number}}{{totalWeightAll ? 'kg' : ''}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"
+          (click)="onRowClicked(row)" [routerLink]="['/order', row.id]">
+      </tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+    </table>
+  </div>
 
   <mat-paginator [length]="totalLinesCount" [pageSize]="10"
                  [pageSizeOptions]="[10, 50, 100]"></mat-paginator>
