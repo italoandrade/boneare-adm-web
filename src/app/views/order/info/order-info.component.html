@@ -64,7 +64,8 @@
                      placeholder="Escolha um cliente"
                      [(ngModel)]="clientSelected" [matAutocomplete]="clientAutocomplete"
                      (keyup)="clientAutocompleteFilter(clientFieldEl.value)" (focus)="subPanelScroll()"
-                     (blur)="clientSelected == clientFieldEl.value ? info.client = clientSelected = undefined : null" [disabled]="loading">
+                     (blur)="clientSelected == clientFieldEl.value ? info.client = clientSelected = undefined : null"
+                     [disabled]="loading">
               <mat-autocomplete #clientAutocomplete="matAutocomplete" [displayWith]="clientDisplayFn">
                 <mat-option *ngFor="let client of clients" [value]="client">
                   {{client.name}}
@@ -165,7 +166,7 @@
           <mat-list>
             <mat-list-item *ngFor="let transaction of info.transactions; let i = index">
               <p matLine>
-                <span> {{transaction.type.name}} </span>
+                <span> {{transaction.type.name}} ({{transaction.date | date : 'dd/MM/yyyy'}}) </span>
               </p>
               <p matLine>
                 {{(transaction.amount) | currency : 'R$'}}
@@ -193,8 +194,7 @@
             <div>
               <mat-form-field appearance="fill">
                 <mat-label>Tipo</mat-label>
-                <mat-select name="newType" [(ngModel)]="newTransaction.typeId" [disabled]="loading"
-                            (selectionChange)="selectTransactionType($event)" name="newType">
+                <mat-select name="newType" [(ngModel)]="newTransaction.typeId" [disabled]="loading">
                   <mat-option *ngFor="let type of transactionTypes" [value]="type.id">
                     {{type.name}}
                   </mat-option>

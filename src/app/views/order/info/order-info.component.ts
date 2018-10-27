@@ -323,18 +323,15 @@ export class OrderInfoComponent implements OnInit {
   }
 
   addNewTransaction() {
-    if (!this.newTransaction.type || !this.newTransaction.amount || !this.newTransaction.date) {
+    if (!this.newTransaction.typeId || !this.newTransaction.amount || !this.newTransaction.date) {
       this.snackBar.open('Preencha todos os campos para adicionar uma nova transação no pedido', null, {
         duration: 3000
       });
       return false;
     }
+    this.newTransaction.type = this.transactionTypes.filter(i => i.id = this.newTransaction.typeId)[0];
     this.info.transactions.push(this.newTransaction);
     this.newTransaction = {date: new Date()};
-  }
-
-  selectTransactionType($event) {
-    console.log($event);
   }
 }
 
