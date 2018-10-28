@@ -7,6 +7,7 @@ import {MatAutocomplete, MatAutocompleteTrigger, MatSnackBar} from '@angular/mat
 import {fromEvent, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, takeUntil} from 'rxjs/operators';
 import {elementClosest} from '../../../core/functions/closest.function';
+import {CustomSnackbarComponent} from '../../../core/components/custom-snackbar/custom-snackbar.component';
 
 @Component({
   selector: 'app-order-info',
@@ -183,7 +184,15 @@ export class OrderInfoComponent implements OnInit {
         },
         err => {
           this.loading = false;
-          console.error(err);
+          if (err.status === 409) {
+            const relations = err.error.relations.map(i => `<a href="${i.url}" target="_blank">${i.relation}</a>`).join(', ');
+            this.snackBar.openFromComponent(CustomSnackbarComponent, {
+              duration: 10000,
+              data: `${err.error.message} com ${relations}`
+            });
+          } else {
+            console.error(err);
+          }
         }
       );
   }

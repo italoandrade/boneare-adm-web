@@ -136,7 +136,7 @@ export class ClientInfoComponent implements OnInit {
         err => {
           this.loading = false;
           if (err.status === 409) {
-            let relations = err.error.relations.map(i => `<a href="${i.url}" target="_blank">${i.relation}</a>`).join(', ');
+            const relations = err.error.relations.map(i => `<a href="${i.url}" target="_blank">${i.relation}</a>`).join(', ');
             this.snackBar.openFromComponent(CustomSnackbarComponent, {
               duration: 10000,
               data: `${err.error.message} com ${relations}`
